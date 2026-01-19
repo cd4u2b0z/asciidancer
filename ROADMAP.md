@@ -1,14 +1,14 @@
-# 🗺️ ASCII Dancer Roadmap
+#  ASCII Dancer Roadmap
 
 Development roadmap and feature tracking for asciidancer.
 
 ---
 
-## 📊 Current Status: v2.2.0
+##  Current Status: v2.2.0
 
 **Rating: 9.0/10** — Feature-rich visualizer with full effects system
 
-### ✅ Completed Features (v2.0 + v2.1)
+###  Completed Features
 - [x] 36 unique poses across 7 energy categories
 - [x] Physics-based joint animation (spring-damper system)
 - [x] Beat detection with BPM estimation
@@ -18,43 +18,29 @@ Development roadmap and feature tracking for asciidancer.
 - [x] PipeWire + PulseAudio audio backends
 - [x] Anti-repetition pose history
 - [x] Easing functions (quad, cubic, bounce, elastic)
-- [x] **INI config file** (~/.config/asciidancer/config.ini)
-- [x] **256-color gradients** with 7 themes
-- [x] **Ground line with shadow/reflection**
-- [x] **Adaptive terminal scaling** (SIGWINCH resize)
-- [x] **Runtime theme cycling** (t key)
+- [x] INI config file (`~/.config/asciidancer/config.ini`)
+- [x] 256-color gradients with 7 themes
+- [x] Ground line with shadow/reflection
+- [x] Adaptive terminal scaling (SIGWINCH resize)
+- [x] Runtime theme cycling (`t` key)
+- [x] Particle system with physics
+- [x] Motion trails with fading
+- [x] Visual enhancements (breathing, floor vibe, shake)
 
 ---
 
-## ✅ v2.1 — Quick Polish (COMPLETED)
+##  v2.1 — Quick Polish (COMPLETED)
 
 **Achieved: 7.5 → 8.5** | Released 2026-01-19
 
 - [x] **Config file (INI format)**
-  - Custom poses path
-  - Color scheme selection
-  - Sensitivity/gain curves
-  - FPS target
-  - Audio source default
-
-- [x] **256-color gradients**
-  - Energy → color mapping
-  - Multiple preset themes (fire, ice, neon, monochrome, matrix, synthwave)
-  - Smooth color transitions
-
+- [x] **256-color gradients** with 7 themes
 - [x] **Ground line with shadow**
-  - Horizontal floor line
-  - Dimmed reflection/shadow of dancer below
-  - Toggle with g/r keys
-
 - [x] **Adaptive terminal scaling**
-  - Detect terminal size with `getmaxyx()`
-  - Scale skeleton coordinates proportionally
-  - Handle resize events (SIGWINCH)
 
 ---
 
-## ✅ v2.2 — Visual Feast (COMPLETED)
+##  v2.2 — Visual Feast (COMPLETED)
 
 **Achieved: 8.5 → 9.0** | Released 2026-01-18
 
@@ -72,11 +58,11 @@ Development roadmap and feature tracking for asciidancer.
 - [x] **Visual enhancements**
   - Subtle idle breathing animation
   - Floor "vibration" on heavy bass
-  - Glow effect on intense movement (double-draw offset)
+  - Glow effect on intense movement
 
 ---
 
-## 🎵 v2.3 — Audio Upgrade
+##  v2.3 — Audio Upgrade
 
 **Goal: Tighter rhythm response**
 
@@ -98,67 +84,67 @@ Development roadmap and feature tracking for asciidancer.
 - [ ] **Frequency band improvements**
   - More granular band separation
   - Configurable crossover frequencies
-  - Per-band sensitivity curves
 
 ---
 
-## 🚀 v3.0 — Major Features (Future)
+##  v2.4 — Polish & UX
 
-**Goal: 9.0 → 10** | High effort, transformative
+**Goal: Professional feel**
 
-- [ ] **Sixel/Kitty graphics protocol (optional backend)**
-  - 10× resolution improvement
-  - True 24-bit color support
-  - Anti-aliased limb rendering
-  - Graceful fallback to braille
+- [ ] **Help overlay** (`?` key)
+  - Semi-transparent control reference
+  - Current settings display
 
-- [ ] **Mirror mode / multiple dancers**
-  - Side-by-side mirrored dancer
-  - Multiple independent dancers
-  - Configurable layout
+- [ ] **Audio source picker** (interactive menu)
+  - List available PipeWire/PulseAudio sources
+  - Select with arrow keys
 
-- [ ] **Recording/export**
-  - asciinema integration
-  - GIF export via ffmpeg
-  - Frame-by-frame capture mode
+- [ ] **Recording mode**
+  - Capture animation to ANSI escape file
+  - Playback without audio
 
-- [x] **Interactive features** (partially done in v2.1)
-  - ~~Runtime sensitivity adjustment (↑/↓ keys)~~ (planned)
-  - [x] Theme cycling (t key)
-  - ~~Pause/freeze frame (space)~~ (planned)
-  - ~~Debug overlay toggle (d key)~~ (planned)
+- [ ] **More themes**
+  - User-defined themes in config
+  - Theme preview mode
 
 ---
 
-## 🐛 Known Issues
+##  v3.0 — Multi-Dancer & Effects
 
-- [ ] High CPU on very fast music (>180 BPM)
-- [ ] Occasional pose "snap" on style change
-- [ ] Some terminals render braille with gaps
+**Goal: Visual spectacle**
 
----
+- [ ] **Multiple dancers**
+  - 2-4 dancers with different styles
+  - Synchronized or independent movement
 
-## 💡 Ideas (Maybe Someday)
+- [ ] **Background effects**
+  - Starfield that pulses to beat
+  - Gradient backgrounds
 
-- [ ] Audio file playback mode (not just live capture)
-- [ ] Lyrics display integration (synchronized)
-- [ ] Network mode (visualize remote audio stream)
-- [ ] Multiple character styles (robot, human, abstract)
-- [ ] Plugin system for custom pose generators
-- [ ] WebSocket output for browser visualization
-
----
-
-## 📈 Progress Tracking
-
-| Version | Status | Rating Target |
-|---------|--------|---------------|
-| v2.0.0 | ✅ Released | 7.5 |
-| v2.1.0 | ✅ Released | 8.5 |
-| v2.2.0 | ✅ Released | 9.0 |
-| v2.3.0 | 📋 Planned | 9.0+ |
-| v3.0.0 | 💭 Future | 10 |
+- [ ] **Text overlays**
+  - Now playing info (if available)
+  - BPM display
+  - Energy meters
 
 ---
 
-<sub>Last updated: 2026-01-18</sub>
+##  Future Ideas
+
+- [ ] **MIDI input support** — React to MIDI notes
+- [ ] **OSC protocol** — External control interface
+- [ ] **Wayland native** — Direct Wayland rendering
+- [ ] **Web version** — WASM + Canvas port
+- [ ] **Preset poses** — Load custom pose files
+- [ ] **Dance battles** — Two dancers, split screen
+- [ ] **VJ mode** — Full-screen, no UI elements
+
+---
+
+##  Version History
+
+| Version | Date | Highlights |
+|---------|------|------------|
+| v2.2.0 | 2026-01-18 | Particles, trails, visual effects |
+| v2.1.0 | 2026-01-19 | Config, themes, ground/shadow |
+| v2.0.0 | 2026-01-18 | Braille skeleton, physics |
+| v1.0.0 | 2026-01-17 | Initial release |

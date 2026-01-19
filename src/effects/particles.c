@@ -150,9 +150,9 @@ void particles_spawn_at(ParticleSystem *ps, float x, float y,
 /* === Preset emitters === */
 
 void particles_emit_bass_hit(ParticleSystem *ps, float x, float y, float intensity) {
-    if (!ps || !ps->enabled || intensity < 0.3f) return;
+    if (!ps || !ps->enabled) return;
     
-    int count = (int)(5 + intensity * 15);
+    int count = (int)(5 + intensity * 30);
     
     EmitterConfig config = {
         .x = x,
@@ -178,9 +178,9 @@ void particles_emit_bass_hit(ParticleSystem *ps, float x, float y, float intensi
 }
 
 void particles_emit_treble_sparkle(ParticleSystem *ps, float x, float y, float intensity) {
-    if (!ps || !ps->enabled || intensity < 0.4f) return;
+    if (!ps || !ps->enabled || intensity < 0.2f) return;
     
-    int count = (int)(3 + intensity * 8);
+    int count = (int)(15 + intensity * 40);
     
     EmitterConfig config = {
         .x = x,
@@ -208,7 +208,7 @@ void particles_emit_treble_sparkle(ParticleSystem *ps, float x, float y, float i
 void particles_emit_beat_burst(ParticleSystem *ps, float x, float y, float intensity) {
     if (!ps || !ps->enabled) return;
     
-    int count = (int)(8 + intensity * 20);
+    int count = (int)(15 + intensity * 40);
     
     EmitterConfig config = {
         .x = x,
@@ -234,7 +234,7 @@ void particles_emit_beat_burst(ParticleSystem *ps, float x, float y, float inten
 }
 
 void particles_emit_foot_stomp(ParticleSystem *ps, float x, float y, float intensity) {
-    if (!ps || !ps->enabled || intensity < 0.5f) return;
+    if (!ps || !ps->enabled || intensity < 0.25f) return;
     
     int count = (int)(4 + intensity * 10);
     

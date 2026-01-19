@@ -12,8 +12,8 @@ MotionTrails* trails_create(void) {
     MotionTrails *trails = calloc(1, sizeof(MotionTrails));
     if (!trails) return NULL;
     
-    trails->fade_rate = 0.7f;       /* Each step fades to 70% */
-    trails->min_velocity = 5.0f;    /* Minimum pixels/frame to show */
+    trails->fade_rate = 0.85f;       /* Each step fades to 70% */
+    trails->min_velocity = 1.0f;    /* Minimum pixels/frame to show */
     trails->trail_length = 6;       /* Default trail length */
     trails->adaptive_length = true;
     trails->enabled = true;

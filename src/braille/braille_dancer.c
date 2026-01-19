@@ -31,8 +31,23 @@ static float bass_velocity = 0;
 static float treble_velocity = 0;
 
 /* Beat detection for effects */
-static float bass_threshold = 0.6f;
-static float treble_threshold = 0.5f;
+static float bass_threshold = 0.3f;
+static float treble_threshold = 0.25f;
+
+/* Pixel dimensions */
+static int pixel_width = 0;
+static int pixel_height = 0;
+
+/* Convert joint normalized coords (0-1) to pixel coords */
+static inline float joint_to_pixel_x(float x) {
+    /* Joint x is 0-1 centered at 0.5, convert to pixel coords */
+    return (x - 0.5f) * (pixel_width * 0.8f) + (pixel_width / 2.0f);
+}
+
+static inline float joint_to_pixel_y(float y) {
+    /* Joint y is 0-1 from top, convert to pixel coords */
+    return y * (pixel_height * 0.8f) + (pixel_height * 0.1f);
+}
 
 int dancer_load_frames(void) {
     if (initialized) return 1;
@@ -51,8 +66,8 @@ int dancer_load_frames(void) {
     }
     
     /* Create effects system */
-    int pixel_width = CANVAS_CELLS_W * 2;   /* 2 pixels per cell width */
-    int pixel_height = CANVAS_CELLS_H * 4;  /* 4 pixels per cell height */
+    pixel_width = CANVAS_CELLS_W * 2;   /* 2 pixels per cell width */
+    pixel_height = CANVAS_CELLS_H * 4;  /* 4 pixels per cell height */
     effects = effects_create(pixel_width, pixel_height);
     
     initialized = 1;
@@ -97,41 +112,49 @@ void dancer_update(struct dancer_state *state, double bass, double mid, double t
     treble_velocity = (float)state->treble_intensity - last_treble;
     
     /* Detect bass hit (rising edge above threshold) */
-    if (effects && bass_velocity > 0.1f && state->bass_intensity > bass_threshold) {
-        /* Get foot position for particle emission */
-        float foot_x = skeleton->canvas_width / 2;  /* Center */
-        float foot_y = skeleton->canvas_height * 0.85f;  /* Near bottom */
+    if (effects && bass_velocity > 0.05f && state->bass_intensity > bass_threshold) {
+        /* Use actual foot joint positions - convert to pixel coords */
+        float foot_x = (skeleton->current[JOINT_FOOT_L].x + skeleton->current[JOINT_FOOT_R].x) / 2;
+        float foot_y = skeleton->current[JOINT_FOOT_L].y;
         
-        effects_on_bass_hit(effects, (float)state->bass_intensity, foot_x, foot_y);
+        effects_on_bass_hit(effects, (float)state->bass_intensity, 
+                           joint_to_pixel_x(foot_x), joint_to_pixel_y(foot_y));
     }
     
     /* Detect treble spike */
-    if (effects && treble_velocity > 0.15f && state->treble_intensity > treble_threshold) {
-        /* Get hand position (approximate) */
-        float hand_x = skeleton->canvas_width / 2 + ((rand() % 20) - 10);
-        float hand_y = skeleton->canvas_height * 0.4f;
+    if (effects && treble_velocity > 0.05f && state->treble_intensity > treble_threshold) {
+        /* Use actual hand joint positions - convert to pixel coords */
+        float hand_x = skeleton->current[JOINT_HAND_R].x;
+        float hand_y = skeleton->current[JOINT_HAND_R].y;
         
-        effects_on_treble_spike(effects, (float)state->treble_intensity, hand_x, hand_y);
+        effects_on_treble_spike(effects, (float)state->treble_intensity, 
+                               joint_to_pixel_x(hand_x), joint_to_pixel_y(hand_y));
     }
     
     /* Detect beat (overall energy spike) */
     float energy = (state->bass_intensity + state->mid_intensity + state->treble_intensity) / 3.0f;
     static float last_energy = 0;
-    if (effects && energy - last_energy > 0.2f && energy > 0.5f) {
-        float center_x = skeleton->canvas_width / 2;
-        float center_y = skeleton->canvas_height / 2;
-        effects_on_beat(effects, energy, center_x, center_y);
+    if (effects && energy - last_energy > 0.1f && energy > 0.3f) {
+        /* Burst from center of dancer - convert to pixel coords */
+        float center_x = skeleton->current[JOINT_HIP_CENTER].x;
+        float center_y = skeleton->current[JOINT_HIP_CENTER].y;
+        effects_on_beat(effects, energy, joint_to_pixel_x(center_x), joint_to_pixel_y(center_y));
     }
     last_energy = energy;
-    
     /* Update effects */
-    if (effects) {
+    if (effects && skeleton) {
         effects_update(effects, dt, (float)state->bass_intensity, 
                       (float)state->treble_intensity, energy);
         
-        /* Update trails with joint positions */
-        if (effects->trails) {
-            trails_update(effects->trails, skeleton->current, MAX_JOINTS, dt);
+        /* Update trails with joint positions converted to pixels */
+        if (effects->trails && pixel_width > 0 && pixel_height > 0) {
+            /* Create converted joint positions in pixel space */
+            Joint pixel_joints[MAX_JOINTS];
+            for (int i = 0; i < MAX_JOINTS; i++) {
+                pixel_joints[i].x = joint_to_pixel_x(skeleton->current[i].x);
+                pixel_joints[i].y = joint_to_pixel_y(skeleton->current[i].y);
+            }
+            trails_update(effects->trails, pixel_joints, MAX_JOINTS, dt);
         }
     }
     
@@ -161,7 +184,7 @@ void dancer_compose_frame(struct dancer_state *state, char *output) {
     braille_canvas_clear(canvas);
     
     /* Render trails first (behind dancer) */
-    if (effects && effects->trails) {
+    if (effects && effects->trails && effects->trails->enabled) {
         trails_render(effects->trails, canvas);
     }
     
@@ -169,9 +192,12 @@ void dancer_compose_frame(struct dancer_state *state, char *output) {
     skeleton_dancer_render(skeleton, canvas);
     
     /* Render particles on top */
-    if (effects && effects->particles) {
+    if (effects && effects->particles && effects->particles->enabled) {
         particles_render(effects->particles, canvas);
     }
+    
+    /* Convert pixels to braille characters */
+    braille_canvas_render(canvas);
     
     /* Convert to UTF-8 output */
     char *ptr = output;

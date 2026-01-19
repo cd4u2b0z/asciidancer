@@ -109,18 +109,18 @@ void effects_update(EffectsManager *fx, float dt, float bass, float treble, floa
 void effects_on_bass_hit(EffectsManager *fx, float intensity, float x, float y) {
     if (!fx || !fx->enabled) return;
     
-    /* Emit bass particles */
-    if (fx->particles && intensity > 0.4f) {
+    /* Emit bass particles - no threshold, let particle system decide */
+    if (fx->particles) {
         particles_emit_bass_hit(fx->particles, x, y, intensity);
     }
     
     /* Add floor vibration */
-    if (fx->enhancements.floor_vibe_enabled && intensity > 0.5f) {
+    if (fx->enhancements.floor_vibe_enabled && intensity > 0.3f) {
         fx->enhancements.floor_vibe_amount += intensity * 2.0f;
     }
     
     /* Screen shake on heavy bass */
-    if (fx->enhancements.shake_enabled && intensity > 0.7f) {
+    if (fx->enhancements.shake_enabled && intensity > 0.5f) {
         fx->enhancements.shake_amount += (intensity - 0.5f) * 3.0f;
     }
 }

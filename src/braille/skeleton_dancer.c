@@ -785,7 +785,7 @@ static void joint_to_pixel(SkeletonDancer *d, Joint j, int *px, int *py) {
 void skeleton_dancer_render(SkeletonDancer *d, BrailleCanvas *canvas) {
     if (!d || !canvas) return;
     
-    braille_canvas_clear(canvas);
+    /* NOTE: Canvas should be cleared by caller before this function */
     
     /* Draw bones */
     for (int i = 0; i < d->skeleton.num_bones; i++) {

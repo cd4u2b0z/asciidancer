@@ -304,7 +304,7 @@ int main(int argc, char *argv[]) {
         render_bars(bass, mid, treble);
 
         snprintf(info_text, sizeof(info_text),
-                 "sens:%.1f %s %s%s%s%s%s | %s",
+                 "sens:%.1f %s %s%s%s%s%s p:%d | %s",
                  sensitivity,
                  theme_names[cfg.theme],
                  show_ground ? "[G]" : "",
@@ -312,7 +312,9 @@ int main(int argc, char *argv[]) {
                  dancer_get_particles() ? "[P]" : "",
                  dancer_get_trails() ? "[M]" : "",
                  dancer_get_breathing() ? "[B]" : "",
+                 dancer_get_particle_count(),
                  use_pulse ? "PulseAudio" : "PipeWire");
+        render_info(info_text);
         render_refresh();
 
         // Handle input

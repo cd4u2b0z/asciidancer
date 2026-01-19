@@ -1,6 +1,6 @@
-<- {motion} = Original work by Dr. Baklava • github.com/cd4u2b0z • 2026 -->
+<- {motion} = {motion} = Original work by Dr. Baklava • github.com/cd4u2b0z • 2026 -->
 
-# 🕺 ASCII Dancer
+#  ASCII Dancer
 
 **A terminal-based audio visualizer with a dancing Unicode Braille character that reacts to music in real-time.**
 
@@ -11,9 +11,9 @@
 
 ```
     ⠀⣀⣀⠀
-   ⠀⣿⣿⣿⠀     ♪ ♫
+   ⠀⣿⣿⣿⠀      
    ⠀⠸⣿⠇⠀      
-   ⣴⣿⣿⣿⣦     ⎯⎯∿∿⎯⎯
+   ⣴⣿⣿⣿⣦     
   ⠀⠻⣿⣿⠟⠀      
    ⠀⢸⣿⡇⠀
    ⠀⢸⣿⡇⠀
@@ -24,29 +24,36 @@
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🎵 Audio-Reactive Animation
+###  Audio-Reactive Animation
 - **Real-time frequency analysis** via FFTW3
 - **36 unique poses** across 7 energy categories
 - **Physics-based animation** with spring-damper joint system
 
-### 🎸 Frequency-Specific Movement
-| Frequency Band | Body Response |
-|----------------|---------------|
-| **Bass** (20-300Hz) | Legs, hips, ground stomps |
-| **Mids** (300-2kHz) | Torso, head bob, bounce |
-| **Treble** (2kHz+) | Arms, hands, flourishes |
+###  Frequency-Specific Movement
+| Band | Range | Body Response |
+|------|-------|---------------|
+|  **Bass** | 20-300Hz | Legs, hips, ground stomps |
+|  **Mids** | 300-2kHz | Torso, head bob, bounce |
+|  **Treble** | 2kHz+ | Arms, hands, flourishes |
 
-### 🎭 Style Detection
+###  Visual Effects (v2.2)
+| Effect | Key | Description |
+|--------|-----|-------------|
+|  **Particles** | `p` | Sparks shoot from feet on bass hits |
+|  **Trails** | `m` | Ghost afterimages follow limb movement |
+|  **Breathing** | `b` | Subtle idle animation |
+
+###  Style Detection
 Automatic genre detection adapts the dancer's style:
-- **Electronic/EDM** → Precise, mechanical movements
-- **Rock** → Aggressive, energetic poses
-- **Hip-Hop** → Smooth, flowing transitions
-- **Ambient** → Gentle swaying
-- **Classical** → Graceful, measured gestures
+-  **Electronic/EDM** — Precise, mechanical movements
+-  **Rock** — Aggressive, energetic poses
+-  **Hip-Hop** — Smooth, flowing transitions
+-  **Ambient** — Gentle swaying
+-  **Classical** — Graceful, measured gestures
 
-### 🧠 Smart Animation System
+###  Smart Animation System
 - **Beat detection** with BPM estimation
 - **Anti-repetition** pose history (avoids recent 8 poses)
 - **Smooth interpolation** via easing functions
@@ -54,7 +61,7 @@ Automatic genre detection adapts the dancer's style:
 
 ---
 
-## 📦 Dependencies
+##  Dependencies
 
 ```bash
 # Arch Linux
@@ -69,7 +76,7 @@ sudo dnf install fftw-devel pulseaudio-libs-devel ncurses-devel pipewire-devel p
 
 ---
 
-## 🔧 Building
+##  Building
 
 ```bash
 # Clone the repository
@@ -85,140 +92,116 @@ make
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ```bash
 ./asciidancer
 ```
 
-### Options
+###  Options
 | Flag | Description |
 |------|-------------|
 | `-s, --source <name>` | Audio source (default: auto) |
 | `-p, --pulse` | Use PulseAudio instead of PipeWire |
 | `-f, --fps <n>` | Target framerate (default: 60) |
-| `-t, --theme <name>` | Color theme (fire, ice, neon, matrix, synthwave, mono) |
+| `-t, --theme <name>` | Color theme |
 | `-c, --config <file>` | Custom config file path |
 | `--no-ground` | Disable ground line |
 | `--no-shadow` | Disable shadow/reflection |
-| `-h, --help` | Show help |
 
-### Controls
+###  Runtime Controls
 | Key | Action |
 |-----|--------|
-| `q` / `Ctrl+C` | Quit |
-| `t` | Cycle color theme |
+| `q` / `Esc` | Quit |
+| `+` / `-` | Adjust sensitivity |
+| `t` | Cycle color themes |
 | `g` | Toggle ground line |
 | `r` | Toggle shadow/reflection |
 | `p` | Toggle particles |
 | `m` | Toggle motion trails |
 | `b` | Toggle breathing animation |
 
-### Configuration
+###  Color Themes
+| Theme | Description |
+|-------|-------------|
+|  `default` | Classic green terminal |
+|  `fire` | Red/orange/yellow gradient |
+|  `ice` | Blue/cyan/white gradient |
+|  `neon` | Vibrant pink/purple/cyan |
+|  `matrix` | Green on black |
+|  `synthwave` | Purple/magenta/cyan |
+|  `mono` | White/gray monochrome |
 
-ASCII Dancer loads settings from `~/.config/asciidancer/config.ini`:
+---
+
+##  Configuration
+
+Config file: `~/.config/asciidancer/config.ini`
 
 ```ini
 [audio]
 source = auto
-use_pipewire = true
+backend = pipewire
+sensitivity = 1.0
 
 [visual]
-theme = fire
-sensitivity = 1.0
-show_ground = true
-show_shadow = true
-
-[terminal]
-target_fps = 60
-auto_scale = true
+theme = matrix
+ground = true
+shadow = true
+particles = true
+trails = true
+breathing = true
 
 [animation]
-smoothing = 0.85
-energy_decay = 0.95
-```
-
-### Color Themes
-
-| Theme | Colors |
-|-------|--------|
-| 🎨 **default** | Cyan gradient |
-| 🔥 **fire** | Red → Orange → Yellow |
-| ❄️ **ice** | Blue → Cyan → White |
-| 💜 **neon** | Magenta → Cyan → Green |
-| 💚 **matrix** | Green shades |
-| 🌆 **synthwave** | Pink → Purple |
-| ⬜ **mono** | Grayscale |
-
----
-
-## 🏗️ Architecture
-
-```
-asciidancer/
-├── src/
-│   ├── main.c                    # Main loop, argument parsing
-│   ├── audio/
-│   │   ├── audio.h               # Audio data structures
-│   │   ├── common.c              # Shared buffer handling
-│   │   ├── pipewire.c            # PipeWire capture (from cava)
-│   │   └── pulse.c               # PulseAudio fallback (from cava)
-│   ├── fft/
-│   │   ├── cavacore.h            # FFT processing header
-│   │   └── cavacore.c            # FFT analysis (from cava)
-│   ├── braille/
-│   │   ├── braille_canvas.h/c    # Pixel-to-braille rendering
-│   │   ├── skeleton_dancer.h/c   # 36-pose skeleton animation
-│   │   └── braille_dancer.c      # Integration layer
-│   ├── dancer/                   # Legacy frame-based dancer
-│   ├── config/
-│   │   ├── config.h/c            # INI config parser
-│   └── render/
-│       ├── render_new.c          # ncursesw UTF-8 rendering
-│       └── colors.h/c            # 256-color theme system
-├── Makefile
-├── CHANGELOG.md
-└── README.md
+fps = 60
 ```
 
 ---
 
-## 🎨 How It Works
+##  Architecture
 
 ```
 ┌─────────────────────────────────────┐
-│         PipeWire / PulseAudio       │
-│         (Audio Capture Thread)      │
+│      PipeWire / PulseAudio          │
+│        (Audio Capture Thread)       │
 └─────────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────┐
 │     cavacore FFT Processing         │
-│  ├─ 256 frequency bins              │
-│  └─ Low-latency analysis            │
+│  ├  256 frequency bins              │
+│  └  Low-latency analysis            │
 └─────────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────┐
 │      Skeleton Dancer Engine         │
-│  ├─ Beat detection + BPM            │
-│  ├─ Style/genre classification      │
-│  ├─ Pose selection (36 poses)       │
-│  └─ Physics interpolation           │
+│  ├  Beat detection + BPM            │
+│  ├  Style/genre classification      │
+│  ├  Pose selection (36 poses)       │
+│  └  Physics interpolation           │
+└─────────────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────┐
+│       Effects System (v2.2)         │
+│  ├  Particle physics simulation     │
+│  ├  Motion trail history            │
+│  └  Visual enhancements             │
 └─────────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────┐
 │       Braille Canvas Renderer       │
-│  ├─ 50×52 virtual pixels            │
-│  ├─ Bézier curves for limbs         │
-│  └─ 25×13 terminal output           │
+│  ├  50×52 virtual pixels            │
+│  ├  Bézier curves for limbs         │
+│  └  25×13 terminal output           │
 └─────────────────────────────────────┘
 ```
 
-### Braille Character Magic
+###  Braille Character Magic
 
-Unicode Braille characters (U+2800–U+28FF) provide **2×4 subpixel resolution** per terminal cell:
+Unicode Braille (U+2800–U+28FF) provides **2×4 subpixel resolution**:
 
 ```
 ┌───┬───┐     Each cell has 8 dots:
@@ -234,36 +217,69 @@ Unicode Braille characters (U+2800–U+28FF) provide **2×4 subpixel resolution*
 
 ---
 
-## 🎭 Pose Categories
+##  Pose Categories
 
 | Category | Poses | Trigger |
 |----------|-------|---------|
-| **IDLE** | 4 | Energy < 0.15 |
-| **CALM** | 5 | Energy 0.15-0.35 |
-| **GROOVE** | 8 | Energy 0.35-0.55 |
-| **ENERGETIC** | 7 | Energy 0.55-0.75 |
-| **INTENSE** | 6 | Energy > 0.75 |
-| **BASS_HIT** | 4 | Strong bass transient |
-| **TREBLE_ACCENT** | 4 | High treble spike |
+|  **IDLE** | 4 | Energy < 0.15 |
+|  **CALM** | 5 | Energy 0.15-0.35 |
+|  **GROOVE** | 8 | Energy 0.35-0.55 |
+|  **ENERGETIC** | 7 | Energy 0.55-0.75 |
+|  **INTENSE** | 6 | Energy > 0.75 |
+|  **BASS_HIT** | 4 | Strong bass transient |
+|  **TREBLE_ACCENT** | 4 | High treble spike |
 
 ---
 
-## 🙏 Acknowledgments
+##  Project Structure
+
+```
+asciidancer/
+├  src/
+│   ├  main.c              # Entry point, main loop
+│   ├  audio/
+│   │   ├  pipewire.c      # PipeWire capture
+│   │   ├  pulse.c         # PulseAudio capture
+│   │   └  common.c        # Shared audio utilities
+│   ├  braille/
+│   │   ├  braille_canvas.c # Pixel-to-braille conversion
+│   │   ├  braille_dancer.c # Dancer integration
+│   │   └  skeleton_dancer.c # Physics & poses
+│   ├  effects/
+│   │   ├  particles.c     # Particle system
+│   │   ├  trails.c        # Motion trails
+│   │   └  effects.c       # Effects manager
+│   ├  render/
+│   │   ├  render_new.c    # ncurses rendering
+│   │   └  colors.c        # 256-color themes
+│   ├  config/
+│   │   └  config.c        # INI config parser
+│   └  fft/
+│       └  cavacore.c      # FFT processing
+├  README.md
+├  CHANGELOG.md
+├  ROADMAP.md
+└  Makefile
+```
+
+---
+
+##  Acknowledgments
 
 This project stands on the shoulders of giants:
 
-### [cava](https://github.com/karlstav/cava) by Karl Stavestrand
-The audio capture and FFT processing code is adapted from cava (Console-based Audio Visualizer for ALSA). Cava's elegant approach to PipeWire/PulseAudio integration and its cavacore FFT library made this project possible.
+###  [cava](https://github.com/karlstav/cava) by Karl Stavestrand
+Audio capture and FFT processing adapted from cava (Console-based Audio Visualizer for ALSA).
 
-### Inspirations
-- **romanm.ch cat animation** — Fluid terminal animation reference
-- **The ncurses library** — Terminal rendering foundation
-- **FFTW3** — Fast Fourier Transform computation
-- **Unicode Consortium** — Braille character specification
+###  Inspirations
+-  **romanm.ch cat animation** — Fluid terminal animation reference
+-  **The ncurses library** — Terminal rendering foundation
+-  **FFTW3** — Fast Fourier Transform computation
+-  **Unicode Consortium** — Braille character specification
 
 ---
 
-## 📜 License
+##  License
 
 MIT License - See [LICENSE](LICENSE) for details.
 
@@ -279,4 +295,4 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 <sub>Original work by **Dr. Baklava** • [github.com/cd4u2b0z](https://github.com/cd4u2b0z) • 2026</sub>
 
-<- {motion} = ZHIuYmFrbGF2YQ== -->
+<- {motion} = {motion} = ZHIuYmFrbGF2YQ== -->
