@@ -97,12 +97,55 @@ make
 | `-s, --source <name>` | Audio source (default: auto) |
 | `-p, --pulse` | Use PulseAudio instead of PipeWire |
 | `-f, --fps <n>` | Target framerate (default: 60) |
+| `-t, --theme <name>` | Color theme (fire, ice, neon, matrix, synthwave, mono) |
+| `-c, --config <file>` | Custom config file path |
+| `--no-ground` | Disable ground line |
+| `--no-shadow` | Disable shadow/reflection |
 | `-h, --help` | Show help |
 
 ### Controls
 | Key | Action |
 |-----|--------|
 | `q` / `Ctrl+C` | Quit |
+| `t` | Cycle color theme |
+| `g` | Toggle ground line |
+| `r` | Toggle shadow/reflection |
+
+### Configuration
+
+ASCII Dancer loads settings from `~/.config/asciidancer/config.ini`:
+
+```ini
+[audio]
+source = auto
+use_pipewire = true
+
+[visual]
+theme = fire
+sensitivity = 1.0
+show_ground = true
+show_shadow = true
+
+[terminal]
+target_fps = 60
+auto_scale = true
+
+[animation]
+smoothing = 0.85
+energy_decay = 0.95
+```
+
+### Color Themes
+
+| Theme | Colors |
+|-------|--------|
+| 🎨 **default** | Cyan gradient |
+| 🔥 **fire** | Red → Orange → Yellow |
+| ❄️ **ice** | Blue → Cyan → White |
+| 💜 **neon** | Magenta → Cyan → Green |
+| 💚 **matrix** | Green shades |
+| 🌆 **synthwave** | Pink → Purple |
+| ⬜ **mono** | Grayscale |
 
 ---
 
@@ -125,8 +168,11 @@ asciidancer/
 │   │   ├── skeleton_dancer.h/c   # 36-pose skeleton animation
 │   │   └── braille_dancer.c      # Integration layer
 │   ├── dancer/                   # Legacy frame-based dancer
+│   ├── config/
+│   │   ├── config.h/c            # INI config parser
 │   └── render/
-│       └── render_new.c          # ncursesw UTF-8 rendering
+│       ├── render_new.c          # ncursesw UTF-8 rendering
+│       └── colors.h/c            # 256-color theme system
 ├── Makefile
 ├── CHANGELOG.md
 └── README.md

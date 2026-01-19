@@ -4,11 +4,11 @@ Development roadmap and feature tracking for asciidancer.
 
 ---
 
-## 📊 Current Status: v2.0.0
+## 📊 Current Status: v2.1.0
 
-**Rating: 7.5/10** — Solid terminal art with real physics animation
+**Rating: 8.5/10** — Polished visualizer with themes and configuration
 
-### ✅ Completed Features
+### ✅ Completed Features (v2.0 + v2.1)
 - [x] 36 unique poses across 7 energy categories
 - [x] Physics-based joint animation (spring-damper system)
 - [x] Beat detection with BPM estimation
@@ -18,31 +18,36 @@ Development roadmap and feature tracking for asciidancer.
 - [x] PipeWire + PulseAudio audio backends
 - [x] Anti-repetition pose history
 - [x] Easing functions (quad, cubic, bounce, elastic)
+- [x] **INI config file** (~/.config/asciidancer/config.ini)
+- [x] **256-color gradients** with 7 themes
+- [x] **Ground line with shadow/reflection**
+- [x] **Adaptive terminal scaling** (SIGWINCH resize)
+- [x] **Runtime theme cycling** (t key)
 
 ---
 
-## 🎯 v2.1 — Quick Polish
+## ✅ v2.1 — Quick Polish (COMPLETED)
 
-**Goal: 7.5 → 8.5** | Low effort, high impact
+**Achieved: 7.5 → 8.5** | Released 2026-01-19
 
-- [ ] **Config file (INI format)**
+- [x] **Config file (INI format)**
   - Custom poses path
   - Color scheme selection
   - Sensitivity/gain curves
   - FPS target
   - Audio source default
 
-- [ ] **256-color gradients**
+- [x] **256-color gradients**
   - Energy → color mapping
-  - Multiple preset themes (fire, ice, neon, monochrome)
+  - Multiple preset themes (fire, ice, neon, monochrome, matrix, synthwave)
   - Smooth color transitions
 
-- [ ] **Ground line with shadow**
+- [x] **Ground line with shadow**
   - Horizontal floor line
   - Dimmed reflection/shadow of dancer below
-  - Shadow sways with movement
+  - Toggle with g/r keys
 
-- [ ] **Adaptive terminal scaling**
+- [x] **Adaptive terminal scaling**
   - Detect terminal size with `getmaxyx()`
   - Scale skeleton coordinates proportionally
   - Handle resize events (SIGWINCH)
@@ -63,14 +68,6 @@ Development roadmap and feature tracking for asciidancer.
   - Store last N joint positions
   - Draw ghost limbs with decreasing opacity
   - Trail length based on movement speed
-
-- [ ] **Color themes**
-  - `fire` — Red/orange/yellow gradient
-  - `ice` — Blue/cyan/white gradient
-  - `neon` — Magenta/cyan/green
-  - `mono` — White/gray
-  - `matrix` — Green shades
-  - `synthwave` — Pink/purple/cyan
 
 - [ ] **Visual enhancements**
   - Subtle idle breathing animation
@@ -125,11 +122,11 @@ Development roadmap and feature tracking for asciidancer.
   - GIF export via ffmpeg
   - Frame-by-frame capture mode
 
-- [ ] **Interactive features**
-  - Runtime sensitivity adjustment (↑/↓ keys)
-  - Theme cycling (t key)
-  - Pause/freeze frame (space)
-  - Debug overlay toggle (d key)
+- [x] **Interactive features** (partially done in v2.1)
+  - ~~Runtime sensitivity adjustment (↑/↓ keys)~~ (planned)
+  - [x] Theme cycling (t key)
+  - ~~Pause/freeze frame (space)~~ (planned)
+  - ~~Debug overlay toggle (d key)~~ (planned)
 
 ---
 
@@ -157,11 +154,11 @@ Development roadmap and feature tracking for asciidancer.
 | Version | Status | Rating Target |
 |---------|--------|---------------|
 | v2.0.0 | ✅ Released | 7.5 |
-| v2.1.0 | 🔄 In Progress | 8.5 |
+| v2.1.0 | ✅ Released | 8.5 |
 | v2.2.0 | 📋 Planned | 9.0 |
 | v2.3.0 | 📋 Planned | 9.0+ |
 | v3.0.0 | 💭 Future | 10 |
 
 ---
 
-<sub>Last updated: 2026-01-18</sub>
+<sub>Last updated: 2026-01-19</sub>
