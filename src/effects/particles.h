@@ -81,6 +81,20 @@ typedef struct {
     int canvas_width;
     int canvas_height;
     
+    /* Body exclusion zone (particles avoid this area) */
+    float body_center_x;
+    float body_center_y;
+    float body_head_y;      /* Top of head */
+    float body_foot_y;      /* Bottom of feet */
+    float body_radius;      /* Horizontal exclusion radius */
+    bool body_mask_enabled;
+    
+    /* Max particle cap for visual clarity */
+    int max_active;
+    
+    /* Silence fade multiplier */
+    float fade_multiplier;
+    
     /* Statistics */
     int total_spawned;
     int total_died;
@@ -115,6 +129,11 @@ void particles_render(ParticleSystem *ps, BrailleCanvas *canvas);
 void particles_clear(ParticleSystem *ps);
 void particles_set_enabled(ParticleSystem *ps, bool enabled);
 bool particles_is_enabled(ParticleSystem *ps);
+
+/* Body masking - prevents particles from obscuring the character */
+void particles_set_body_mask(ParticleSystem *ps, float center_x, float center_y,
+                             float head_y, float foot_y, float radius);
+void particles_set_fade_multiplier(ParticleSystem *ps, float mult);
 
 /* Statistics */
 int particles_get_active_count(ParticleSystem *ps);

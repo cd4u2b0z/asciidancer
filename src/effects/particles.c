@@ -32,6 +32,18 @@ ParticleSystem* particles_create(int canvas_width, int canvas_height) {
     ps->world_drag = 0.98f;
     ps->enabled = true;
     
+    /* Body mask defaults (disabled until set) */
+    ps->body_mask_enabled = false;
+    ps->body_center_x = canvas_width / 2.0f;
+    ps->body_center_y = canvas_height / 2.0f;
+    ps->body_radius = 8.0f;
+    
+    /* Particle cap for visual clarity */
+    ps->max_active = 40;  /* Reduced from 256 for cleaner visuals */
+    
+    /* Normal fade speed */
+    ps->fade_multiplier = 1.0f;
+    
     /* Seed random if not already */
     static bool seeded = false;
     if (!seeded) {
@@ -66,6 +78,12 @@ static int find_slot(ParticleSystem *ps) {
 void particles_spawn(ParticleSystem *ps, EmitterConfig *config, int count) {
     if (!ps || !ps->enabled || !config) return;
     
+    /* Cap spawning if we're at max active particles */
+    if (ps->active_count >= ps->max_active) {
+        count = count / 4;  /* Drastically reduce spawns when full */
+        if (count < 1) return;
+    }
+    
     for (int i = 0; i < count; i++) {
         int idx = find_slot(ps);
         Particle *p = &ps->particles[idx];
@@ -73,6 +91,25 @@ void particles_spawn(ParticleSystem *ps, EmitterConfig *config, int count) {
         /* Position */
         p->x = config->x;
         p->y = config->y;
+        
+        /* Body mask check - nudge spawn point outward if too close to body */
+        if (ps->body_mask_enabled) {
+            float dx = p->x - ps->body_center_x;
+            float dy = p->y - ps->body_center_y;
+            float dist = sqrtf(dx * dx + dy * dy);
+            
+            /* If within body exclusion zone, push outward */
+            if (dist < ps->body_radius && dist > 0.1f) {
+                float push = (ps->body_radius - dist) + 3.0f;
+                p->x += (dx / dist) * push;
+                p->y += (dy / dist) * push;
+            } else if (dist < 0.1f) {
+                /* Dead center - push in random direction */
+                float angle = randf() * 2.0f * M_PI;
+                p->x += cosf(angle) * (ps->body_radius + 3.0f);
+                p->y += sinf(angle) * (ps->body_radius + 3.0f);
+            }
+        }
         
         /* Velocity based on pattern */
         float angle, speed;
@@ -152,24 +189,25 @@ void particles_spawn_at(ParticleSystem *ps, float x, float y,
 void particles_emit_bass_hit(ParticleSystem *ps, float x, float y, float intensity) {
     if (!ps || !ps->enabled) return;
     
-    int count = (int)(5 + intensity * 30);
+    /* Reduced particle count for cleaner visuals */
+    int count = (int)(2 + intensity * 8);  /* Was 5 + intensity * 30 */
     
     EmitterConfig config = {
         .x = x,
         .y = y,
-        .spread_angle = M_PI,
+        .spread_angle = M_PI * 0.6f,  /* Narrower spread */
         .base_angle = -M_PI / 2,
-        .min_speed = 40.0f + intensity * 60.0f,
-        .max_speed = 80.0f + intensity * 100.0f,
-        .min_life = 0.4f,
-        .max_life = 1.0f,
-        .gravity = 150.0f,
-        .drag = 0.96f,
+        .min_speed = 30.0f + intensity * 40.0f,  /* Slower */
+        .max_speed = 60.0f + intensity * 60.0f,
+        .min_life = 0.3f,
+        .max_life = 0.7f,  /* Shorter life */
+        .gravity = 180.0f,  /* More gravity = falls faster, clears screen */
+        .drag = 0.94f,
         .size_min = 1.0f,
-        .size_max = 2.0f,
+        .size_max = 1.0f,  /* Smaller */
         .pattern = SPAWN_FOUNTAIN,
         .type = PARTICLE_SPARK,
-        .color_base = 1,  /* Fire colors */
+        .color_base = 1,
         .fade_out = true,
         .shrink = false
     };
@@ -180,24 +218,25 @@ void particles_emit_bass_hit(ParticleSystem *ps, float x, float y, float intensi
 void particles_emit_treble_sparkle(ParticleSystem *ps, float x, float y, float intensity) {
     if (!ps || !ps->enabled || intensity < 0.2f) return;
     
-    int count = (int)(15 + intensity * 40);
+    /* Reduced particle count for cleaner visuals */
+    int count = (int)(3 + intensity * 10);  /* Was 15 + intensity * 40 */
     
     EmitterConfig config = {
         .x = x,
         .y = y,
         .spread_angle = M_PI * 2,
         .base_angle = 0,
-        .min_speed = 10.0f,
-        .max_speed = 30.0f,
-        .min_life = 0.2f,
-        .max_life = 0.5f,
-        .gravity = 0.0f,  /* No gravity for sparkles */
-        .drag = 0.9f,
+        .min_speed = 15.0f,  /* Slightly faster to move away */
+        .max_speed = 40.0f,
+        .min_life = 0.15f,  /* Shorter life */
+        .max_life = 0.35f,
+        .gravity = 0.0f,
+        .drag = 0.85f,  /* More drag = stops faster */
         .size_min = 1.0f,
         .size_max = 1.0f,
         .pattern = SPAWN_SPARKLE,
         .type = PARTICLE_SPARK,
-        .color_base = 2,  /* Bright colors */
+        .color_base = 2,
         .fade_out = true,
         .shrink = false
     };
@@ -208,17 +247,18 @@ void particles_emit_treble_sparkle(ParticleSystem *ps, float x, float y, float i
 void particles_emit_beat_burst(ParticleSystem *ps, float x, float y, float intensity) {
     if (!ps || !ps->enabled) return;
     
-    int count = (int)(15 + intensity * 40);
+    /* Reduced particle count for cleaner visuals */
+    int count = (int)(4 + intensity * 12);  /* Was 15 + intensity * 40 */
     
     EmitterConfig config = {
         .x = x,
         .y = y,
         .spread_angle = M_PI * 2,
         .base_angle = 0,
-        .min_speed = 50.0f * intensity,
-        .max_speed = 120.0f * intensity,
-        .min_life = 0.3f,
-        .max_life = 0.7f,
+        .min_speed = 40.0f * intensity,  /* Slightly slower */
+        .max_speed = 80.0f * intensity,
+        .min_life = 0.2f,  /* Shorter life */
+        .max_life = 0.5f,
         .gravity = 80.0f,
         .drag = 0.94f,
         .size_min = 1.0f,
@@ -299,12 +339,15 @@ void particles_update(ParticleSystem *ps, float dt) {
     
     ps->active_count = 0;
     
+    /* Apply fade multiplier to dt for faster clearing */
+    float effective_dt = dt * ps->fade_multiplier;
+    
     for (int i = 0; i < MAX_PARTICLES; i++) {
         Particle *p = &ps->particles[i];
         if (!p->active) continue;
         
-        /* Update lifetime */
-        p->lifetime -= dt;
+        /* Update lifetime (faster when fade_multiplier > 1) */
+        p->lifetime -= effective_dt;
         if (p->lifetime <= 0) {
             p->active = false;
             ps->total_died++;
@@ -326,6 +369,19 @@ void particles_update(ParticleSystem *ps, float dt) {
         /* Update position */
         p->x += p->vx * dt;
         p->y += p->vy * dt;
+        
+        /* Body mask check during movement - push particles away from body */
+        if (ps->body_mask_enabled) {
+            float dx = p->x - ps->body_center_x;
+            float dy = p->y - ps->body_center_y;
+            float dist = sqrtf(dx * dx + dy * dy);
+            
+            if (dist < ps->body_radius * 0.7f && dist > 0.1f) {
+                /* Push outward with some velocity */
+                p->vx += (dx / dist) * 30.0f * dt;
+                p->vy += (dy / dist) * 30.0f * dt;
+            }
+        }
         
         /* Bounds check - deactivate if off screen */
         if (p->x < -10 || p->x > ps->canvas_width + 10 ||
@@ -351,6 +407,16 @@ void particles_render(ParticleSystem *ps, BrailleCanvas *canvas) {
         
         /* Skip if brightness too low */
         if (p->brightness < 0.1f) continue;
+        
+        /* Body mask check - don't render particles that would obscure the character */
+        if (ps->body_mask_enabled) {
+            float dx = p->x - ps->body_center_x;
+            float dy = p->y - ps->body_center_y;
+            float dist = sqrtf(dx * dx + dy * dy);
+            
+            /* Skip rendering if inside body exclusion zone */
+            if (dist < ps->body_radius * 0.8f) continue;
+        }
         
         switch (p->type) {
             case PARTICLE_SPARK:
@@ -411,4 +477,20 @@ bool particles_is_enabled(ParticleSystem *ps) {
 
 int particles_get_active_count(ParticleSystem *ps) {
     return ps ? ps->active_count : 0;
+}
+
+void particles_set_body_mask(ParticleSystem *ps, float center_x, float center_y,
+                             float head_y, float foot_y, float radius) {
+    if (!ps) return;
+    ps->body_center_x = center_x;
+    ps->body_center_y = (head_y + foot_y) / 2.0f;  /* Vertical center */
+    ps->body_head_y = head_y;
+    ps->body_foot_y = foot_y;
+    ps->body_radius = radius;
+    ps->body_mask_enabled = true;
+}
+
+void particles_set_fade_multiplier(ParticleSystem *ps, float mult) {
+    if (!ps) return;
+    ps->fade_multiplier = (mult > 0.1f) ? mult : 0.1f;
 }

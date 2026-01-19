@@ -125,16 +125,18 @@ static Pose make_pose(const char *name, PoseCategory cat,
     float lean_rad = DEG2RAD(lean);
     float shoulder_rad = DEG2RAD(shoulder_angle);
     
-    /* Body dimensions */
-    float head_size = 0.08f;
-    float neck_len = 0.05f;
-    float shoulder_width = 0.15f;
-    float upper_arm = 0.12f;
-    float lower_arm = 0.10f;
-    float spine_len = 0.20f;
-    float hip_width = 0.10f;
-    float upper_leg = 0.15f;
-    float lower_leg = 0.13f;
+    /* Body dimensions - adjusted for better human proportions (v2.4 polish)
+     * Head is smaller relative to body, legs are longer for better silhouette
+     */
+    float head_size = 0.06f;       /* Was 0.08f - smaller head */
+    float neck_len = 0.04f;        /* Was 0.05f - shorter neck */
+    float shoulder_width = 0.14f;  /* Was 0.15f - slightly narrower */
+    float upper_arm = 0.10f;       /* Was 0.12f - shorter arms */
+    float lower_arm = 0.09f;       /* Was 0.10f */
+    float spine_len = 0.16f;       /* Was 0.20f - shorter torso */
+    float hip_width = 0.08f;       /* Was 0.10f - narrower hips */
+    float upper_leg = 0.18f;       /* Was 0.15f - LONGER legs */
+    float lower_leg = 0.16f;       /* Was 0.13f - LONGER lower legs */
     
     pose.joints[JOINT_HEAD].x = head_x;
     pose.joints[JOINT_HEAD].y = head_y;

@@ -2,6 +2,7 @@
  * Braille Dancer - High-resolution dancer using braille rendering
  * Integrates skeleton animation with the existing dancer interface
  * v2.2: Added particle system, motion trails, visual enhancements
+ * v2.4: Polish pass - body masking, reduced particle density, better proportions
  */
 
 #include <stdio.h>
@@ -14,6 +15,7 @@
 #include "braille_canvas.h"
 #include "skeleton_dancer.h"
 #include "../effects/effects.h"
+#include "../effects/particles.h"  /* For body mask functions */
 
 /* Canvas size in terminal cells */
 #define CANVAS_CELLS_W 25
@@ -37,7 +39,6 @@ static float treble_threshold = 0.12f;
 /* Continuous particle spawning */
 static float particle_spawn_timer = 0.0f;
 static float particle_spawn_rate = 0.05f;  /* Seconds between spawns */
-static float last_particle_energy = 0.0f;
 
 /* Rhythm tracking (v2.3) */
 static float current_beat_phase = 0.0f;
@@ -385,14 +386,33 @@ void dancer_update_with_rhythm(struct dancer_state *state,
     static float silence_timer = 0;
     if (energy < 0.02f) {
         silence_timer += dt;
-        if (silence_timer > 0.5f && effects && effects->particles) {
-            /* Music has been silent for 0.5s - let particles fade naturally */
-            /* (they'll decay on their own, no need to force clear) */
+        /* Fast fade when silent - accelerate particle death */
+        if (effects && effects->particles) {
+            particles_set_fade_multiplier(effects->particles, 3.0f);
         }
     } else {
         silence_timer = 0;
+        /* Normal fade speed when playing */
+        if (effects && effects->particles) {
+            particles_set_fade_multiplier(effects->particles, 1.0f);
+        }
     }
-    last_particle_energy = energy;
+    
+    /* Update body mask for particles - keep them away from character center */
+    if (effects && effects->particles && skeleton) {
+        float head_px = joint_to_pixel_x(skeleton->current[JOINT_HEAD].x);
+        float head_py = joint_to_pixel_y(skeleton->current[JOINT_HEAD].y);
+        float hip_py = joint_to_pixel_y(skeleton->current[JOINT_HIP_CENTER].y);
+        float foot_py = joint_to_pixel_y(skeleton->current[JOINT_FOOT_L].y);
+        
+        /* Body exclusion radius based on shoulder width */
+        float shoulder_l = joint_to_pixel_x(skeleton->current[JOINT_SHOULDER_L].x);
+        float shoulder_r = joint_to_pixel_x(skeleton->current[JOINT_SHOULDER_R].x);
+        float body_radius = (shoulder_r - shoulder_l) * 0.8f + 4.0f;
+        
+        particles_set_body_mask(effects->particles, head_px, 
+                               (head_py + hip_py) / 2.0f, head_py, foot_py, body_radius);
+    }
     
     /* Update effects */
     if (effects) {
