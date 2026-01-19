@@ -1,5 +1,5 @@
 /*
- * Configuration system for asciidancer v2.1
+ * Configuration system for asciidancer v2.4
  * INI file parser and runtime settings
  */
 
@@ -102,6 +102,12 @@ ColorTheme config_theme_from_name(const char *name) {
     if (strcasecmp(name, "matrix") == 0) return THEME_MATRIX;
     if (strcasecmp(name, "synthwave") == 0) return THEME_SYNTHWAVE;
     if (strcasecmp(name, "mono") == 0) return THEME_MONO;
+    if (strcasecmp(name, "aurora") == 0) return THEME_AURORA;
+    if (strcasecmp(name, "sunset") == 0) return THEME_SUNSET;
+    if (strcasecmp(name, "ocean") == 0) return THEME_OCEAN;
+    if (strcasecmp(name, "candy") == 0) return THEME_CANDY;
+    if (strcasecmp(name, "vapor") == 0) return THEME_VAPOR;
+    if (strcasecmp(name, "ember") == 0) return THEME_EMBER;
     
     return THEME_DEFAULT;
 }
@@ -115,6 +121,13 @@ const char *config_theme_name(ColorTheme theme) {
         case THEME_MATRIX:    return "matrix";
         case THEME_SYNTHWAVE: return "synthwave";
         case THEME_MONO:      return "mono";
+        case THEME_AURORA:    return "aurora";
+        case THEME_SUNSET:    return "sunset";
+        case THEME_OCEAN:     return "ocean";
+        case THEME_CANDY:     return "candy";
+        case THEME_VAPOR:     return "vapor";
+        case THEME_EMBER:     return "ember";
+        case THEME_COUNT:     return "default";
         default:              return "default";
     }
 }
@@ -213,7 +226,7 @@ int config_save(const Config *cfg, const char *path) {
     FILE *f = fopen(path, "w");
     if (!f) return -1;
     
-    fprintf(f, "# asciidancer configuration v2.1\n\n");
+    fprintf(f, "# asciidancer configuration v2.4\n\n");
     
     fprintf(f, "[audio]\n");
     fprintf(f, "source = %s\n", cfg->audio_source);

@@ -198,6 +198,137 @@ static void setup_theme_mono(ThemeColors *t) {
     t->bpm_color = gray_to_256(20);
     t->background = -1;
 }
+static void setup_theme_aurora(ThemeColors *t) {
+    /* Aurora: Green -> Teal -> Blue -> Purple (Northern Lights) */
+    t->dancer_colors[0] = rgb_to_256(0, 2, 1);
+    t->dancer_colors[1] = rgb_to_256(0, 3, 2);
+    t->dancer_colors[2] = rgb_to_256(0, 4, 3);
+    t->dancer_colors[3] = rgb_to_256(0, 4, 4);
+    t->dancer_colors[4] = rgb_to_256(1, 3, 5);
+    t->dancer_colors[5] = rgb_to_256(2, 2, 5);
+    t->dancer_colors[6] = rgb_to_256(3, 1, 5);
+    t->dancer_colors[7] = rgb_to_256(4, 1, 5);
+    t->dancer_colors[8] = rgb_to_256(4, 2, 5);
+    t->dancer_colors[9] = rgb_to_256(5, 3, 5);
+    t->shadow_color = rgb_to_256(0, 1, 1);
+    t->ground_color = rgb_to_256(1, 2, 3);
+    t->bass_color = rgb_to_256(0, 4, 2);
+    t->mid_color = rgb_to_256(0, 3, 5);
+    t->treble_color = rgb_to_256(4, 1, 5);
+    t->info_color = rgb_to_256(2, 4, 4);
+    t->bpm_color = rgb_to_256(0, 5, 3);
+    t->background = -1;
+}
+
+static void setup_theme_sunset(ThemeColors *t) {
+    /* Sunset: Deep orange -> Pink -> Purple */
+    t->dancer_colors[0] = rgb_to_256(2, 0, 1);
+    t->dancer_colors[1] = rgb_to_256(3, 0, 1);
+    t->dancer_colors[2] = rgb_to_256(4, 1, 2);
+    t->dancer_colors[3] = rgb_to_256(5, 1, 2);
+    t->dancer_colors[4] = rgb_to_256(5, 2, 1);
+    t->dancer_colors[5] = rgb_to_256(5, 3, 0);
+    t->dancer_colors[6] = rgb_to_256(5, 4, 1);
+    t->dancer_colors[7] = rgb_to_256(5, 4, 2);
+    t->dancer_colors[8] = rgb_to_256(5, 5, 3);
+    t->dancer_colors[9] = rgb_to_256(5, 5, 4);
+    t->shadow_color = rgb_to_256(1, 0, 1);
+    t->ground_color = rgb_to_256(3, 1, 2);
+    t->bass_color = rgb_to_256(5, 2, 0);
+    t->mid_color = rgb_to_256(5, 1, 3);
+    t->treble_color = rgb_to_256(3, 0, 4);
+    t->info_color = rgb_to_256(5, 4, 3);
+    t->bpm_color = rgb_to_256(5, 3, 0);
+    t->background = -1;
+}
+
+static void setup_theme_ocean(ThemeColors *t) {
+    /* Ocean: Deep navy -> Teal -> Aqua -> Seafoam */
+    t->dancer_colors[0] = rgb_to_256(0, 1, 2);
+    t->dancer_colors[1] = rgb_to_256(0, 1, 3);
+    t->dancer_colors[2] = rgb_to_256(0, 2, 3);
+    t->dancer_colors[3] = rgb_to_256(0, 2, 4);
+    t->dancer_colors[4] = rgb_to_256(0, 3, 4);
+    t->dancer_colors[5] = rgb_to_256(1, 4, 4);
+    t->dancer_colors[6] = rgb_to_256(2, 4, 4);
+    t->dancer_colors[7] = rgb_to_256(2, 5, 4);
+    t->dancer_colors[8] = rgb_to_256(3, 5, 4);
+    t->dancer_colors[9] = rgb_to_256(4, 5, 5);
+    t->shadow_color = rgb_to_256(0, 0, 1);
+    t->ground_color = rgb_to_256(0, 2, 3);
+    t->bass_color = rgb_to_256(0, 2, 4);
+    t->mid_color = rgb_to_256(0, 4, 4);
+    t->treble_color = rgb_to_256(3, 5, 5);
+    t->info_color = rgb_to_256(2, 4, 4);
+    t->bpm_color = rgb_to_256(0, 5, 4);
+    t->background = -1;
+}
+
+static void setup_theme_candy(ThemeColors *t) {
+    /* Candy: Soft pastel pink -> mint -> lavender */
+    t->dancer_colors[0] = rgb_to_256(4, 2, 3);
+    t->dancer_colors[1] = rgb_to_256(5, 2, 3);
+    t->dancer_colors[2] = rgb_to_256(5, 3, 4);
+    t->dancer_colors[3] = rgb_to_256(5, 4, 5);
+    t->dancer_colors[4] = rgb_to_256(4, 4, 5);
+    t->dancer_colors[5] = rgb_to_256(3, 5, 4);
+    t->dancer_colors[6] = rgb_to_256(4, 5, 4);
+    t->dancer_colors[7] = rgb_to_256(4, 5, 5);
+    t->dancer_colors[8] = rgb_to_256(5, 5, 4);
+    t->dancer_colors[9] = rgb_to_256(5, 5, 5);
+    t->shadow_color = rgb_to_256(3, 2, 3);
+    t->ground_color = rgb_to_256(4, 3, 4);
+    t->bass_color = rgb_to_256(5, 2, 3);
+    t->mid_color = rgb_to_256(3, 5, 4);
+    t->treble_color = rgb_to_256(4, 3, 5);
+    t->info_color = rgb_to_256(5, 4, 5);
+    t->bpm_color = rgb_to_256(5, 3, 4);
+    t->background = -1;
+}
+
+static void setup_theme_vapor(ThemeColors *t) {
+    /* Vapor: Hot pink -> Cyan -> Purple (intense vaporwave) */
+    t->dancer_colors[0] = rgb_to_256(5, 0, 2);
+    t->dancer_colors[1] = rgb_to_256(5, 0, 3);
+    t->dancer_colors[2] = rgb_to_256(5, 0, 4);
+    t->dancer_colors[3] = rgb_to_256(4, 0, 5);
+    t->dancer_colors[4] = rgb_to_256(2, 0, 5);
+    t->dancer_colors[5] = rgb_to_256(0, 2, 5);
+    t->dancer_colors[6] = rgb_to_256(0, 4, 5);
+    t->dancer_colors[7] = rgb_to_256(0, 5, 5);
+    t->dancer_colors[8] = rgb_to_256(0, 5, 4);
+    t->dancer_colors[9] = rgb_to_256(2, 5, 5);
+    t->shadow_color = rgb_to_256(2, 0, 2);
+    t->ground_color = rgb_to_256(5, 0, 3);
+    t->bass_color = rgb_to_256(5, 0, 3);
+    t->mid_color = rgb_to_256(0, 5, 5);
+    t->treble_color = rgb_to_256(3, 0, 5);
+    t->info_color = rgb_to_256(5, 2, 4);
+    t->bpm_color = rgb_to_256(0, 5, 5);
+    t->background = -1;
+}
+
+static void setup_theme_ember(ThemeColors *t) {
+    /* Ember: Glowing coals - dark red with orange/yellow highlights */
+    t->dancer_colors[0] = rgb_to_256(1, 0, 0);
+    t->dancer_colors[1] = rgb_to_256(2, 0, 0);
+    t->dancer_colors[2] = rgb_to_256(2, 0, 0);
+    t->dancer_colors[3] = rgb_to_256(3, 0, 0);
+    t->dancer_colors[4] = rgb_to_256(4, 0, 0);
+    t->dancer_colors[5] = rgb_to_256(4, 1, 0);
+    t->dancer_colors[6] = rgb_to_256(5, 2, 0);
+    t->dancer_colors[7] = rgb_to_256(5, 3, 0);
+    t->dancer_colors[8] = rgb_to_256(5, 4, 0);
+    t->dancer_colors[9] = rgb_to_256(5, 5, 2);
+    t->shadow_color = rgb_to_256(1, 0, 0);
+    t->ground_color = rgb_to_256(2, 0, 0);
+    t->bass_color = rgb_to_256(3, 0, 0);
+    t->mid_color = rgb_to_256(5, 2, 0);
+    t->treble_color = rgb_to_256(5, 4, 0);
+    t->info_color = rgb_to_256(4, 2, 0);
+    t->bpm_color = rgb_to_256(5, 3, 0);
+    t->background = -1;
+}
 
 /* ============ Public functions ============ */
 
@@ -227,6 +358,12 @@ void colors_apply_theme(ColorTheme theme) {
         case THEME_MATRIX:    setup_theme_matrix(&current_theme);    break;
         case THEME_SYNTHWAVE: setup_theme_synthwave(&current_theme); break;
         case THEME_MONO:      setup_theme_mono(&current_theme);      break;
+        case THEME_AURORA:    setup_theme_aurora(&current_theme);    break;
+        case THEME_SUNSET:    setup_theme_sunset(&current_theme);    break;
+        case THEME_OCEAN:     setup_theme_ocean(&current_theme);     break;
+        case THEME_CANDY:     setup_theme_candy(&current_theme);     break;
+        case THEME_VAPOR:     setup_theme_vapor(&current_theme);     break;
+        case THEME_EMBER:     setup_theme_ember(&current_theme);     break;
         default:              setup_theme_default(&current_theme);   break;
     }
     
@@ -335,6 +472,12 @@ const char* colors_get_theme_preview(ColorTheme theme) {
         case THEME_MATRIX:    return "💚 Matrix (green shades)";
         case THEME_SYNTHWAVE: return "🌆 Synthwave (pink→purple)";
         case THEME_MONO:      return "⬜ Mono (grayscale)";
+        case THEME_AURORA:    return "🌌 Aurora (northern lights)";
+        case THEME_SUNSET:    return "🌅 Sunset (orange/pink/purple)";
+        case THEME_OCEAN:     return "🌊 Ocean (deep teal/aqua)";
+        case THEME_CANDY:     return "🍬 Candy (pastel rainbow)";
+        case THEME_VAPOR:     return "📼 Vapor (hot pink/cyan)";
+        case THEME_EMBER:     return "🔴 Ember (glowing coals)";
         default:              return "🎨 Default (cyan gradient)";
     }
 }

@@ -1,6 +1,6 @@
 // ASCII Dancer - Terminal Audio Visualizer
 // Main entry point and event loop
-// v2.2: Effects system (particles, trails, breathing)
+// v2.4+: Help overlay and more themes (particles, trails, breathing)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +17,7 @@
 #include "render/colors.h"
 #include "config/config.h"
 #include "audio/rhythm.h"
+#include "ui/help_overlay.h"
 
 // Default configuration
 #define DEFAULT_RATE 44100
@@ -42,13 +43,14 @@ static void print_usage(const char *name) {
     printf("  -p, --pulse           Use PulseAudio instead of PipeWire\n");
 #endif
     printf("  -f, --fps <n>         Target framerate (default: %d)\n", cfg.target_fps);
-    printf("  -t, --theme <name>    Color theme: default, fire, ice, neon, matrix, synthwave, mono\n");
+    printf("  -t, --theme <name>    Color theme (13 available, press t to cycle)\n");
     printf("  -c, --config <file>   Config file path (default: ~/.config/asciidancer/config.ini)\n");
     printf("      --no-ground       Disable ground line\n");
     printf("      --no-shadow       Disable shadow/reflection\n");
     printf("  -h, --help            Show this help\n");
     printf("\n");
     printf("Controls:\n");
+    printf("  ?, F1                 Toggle help overlay\n");
     printf("  q, ESC                Quit\n");
     printf("  +/-                   Adjust sensitivity\n");
     printf("  t                     Cycle through themes\n");
@@ -59,13 +61,13 @@ static void print_usage(const char *name) {
     printf("  b                     Toggle breathing animation\n");
     printf("\n");
     printf("Themes:\n");
-    for (int i = 0; i <= THEME_MONO; i++) {
+    for (int i = 0; i < THEME_COUNT; i++) {
         printf("  %s\n", colors_get_theme_preview((ColorTheme)i));
     }
 }
 
 static void cycle_theme(void) {
-    cfg.theme = (cfg.theme + 1) % (THEME_MONO + 1);
+    cfg.theme = (cfg.theme + 1) % THEME_COUNT;
     render_set_theme(cfg.theme);
 }
 
@@ -247,6 +249,9 @@ int main(int argc, char *argv[]) {
     RhythmState *rhythm = rhythm_init();
     float spectrum[NUM_BARS];  // Spectrum buffer for rhythm analysis
 
+    // Initialize help overlay (v2.4+)
+    HelpOverlay *help = help_overlay_create();
+
     // Initialize ncurses with 256-color support
     if (render_init() != 0) {
         fprintf(stderr, "Failed to initialize ncurses\n");
@@ -276,7 +281,8 @@ int main(int argc, char *argv[]) {
 
     // Theme names for display
     const char *theme_names[] = {
-        "default", "fire", "ice", "neon", "matrix", "synthwave", "mono"
+        "default", "fire", "ice", "neon", "matrix", "synthwave", "mono",
+        "aurora", "sunset", "ocean", "candy", "vapor", "ember"
     };
 
     // Main loop
@@ -320,6 +326,19 @@ int main(int argc, char *argv[]) {
         render_clear();
         render_dancer(&dancer);
         render_bars(bass, mid, treble);
+
+        // Update and render help overlay
+        help_overlay_update(help, 1.0f / target_fps);
+        if (help_overlay_is_active(help)) {
+            int sw, sh;
+            getmaxyx(stdscr, sh, sw);
+            help_overlay_render(help, sw, sh,
+                              theme_names[cfg.theme],
+                              rhythm_get_bpm(rhythm), sensitivity,
+                              show_ground, show_shadow,
+                              dancer_get_particles(), dancer_get_trails(),
+                              dancer_get_breathing());
+        }
 
         snprintf(info_text, sizeof(info_text),
                  "sens:%.1f %.0fbpm %s %s%s%s%s%s p:%d | %s",
@@ -384,6 +403,10 @@ int main(int argc, char *argv[]) {
         case 'D':
             debug_mode = !debug_mode;
             break;
+        case '?':
+        case KEY_F(1):
+            help_overlay_toggle(help);
+            break;
         }
 
         // Wait for next frame
@@ -400,6 +423,7 @@ int main(int argc, char *argv[]) {
     cava_destroy(plan);
     dancer_cleanup();
     rhythm_destroy(rhythm);
+    help_overlay_destroy(help);
     free(cava_out);
     free(audio.source);
     free(audio.cava_in);

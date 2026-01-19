@@ -1,5 +1,5 @@
 /*
- * Configuration system for asciidancer v2.1
+ * Configuration system for asciidancer v2.4
  * INI file parser and runtime settings
  */
 #pragma once
@@ -14,7 +14,15 @@ typedef enum {
     THEME_NEON,
     THEME_MATRIX,
     THEME_SYNTHWAVE,
-    THEME_MONO
+    THEME_MONO,
+    /* v2.4+ new themes */
+    THEME_AURORA,       /* Northern lights: green/purple/blue */
+    THEME_SUNSET,       /* Warm sunset: orange/pink/purple */
+    THEME_OCEAN,        /* Deep sea: teal/blue/aqua */
+    THEME_CANDY,        /* Pastel candy: pink/mint/lavender */
+    THEME_VAPOR,        /* Vaporwave: hot pink/cyan/purple */
+    THEME_EMBER,        /* Glowing coals: dark red/orange glow */
+    THEME_COUNT         /* Always last - count of themes */
 } ColorTheme;
 
 /* Configuration structure */

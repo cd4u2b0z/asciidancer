@@ -25,7 +25,8 @@ COMMON_SRCS = src/main.c \
 
 # v2.4 additions: Control bus and UI reactivity
 V24_SRCS = src/control/control_bus.c \
-           src/ui/ui_reactive.c
+           src/ui/ui_reactive.c \
+           src/ui/help_overlay.c
 
 # Frame-based dancer (uses your custom braille frames)
 FRAME_SRCS = src/dancer/dancer_rhythm.c
