@@ -80,10 +80,10 @@ void rhythm_destroy(RhythmState *state);
 void rhythm_update(RhythmState *state, float *spectrum, int num_bins, double dt);
 
 // Get current beat phase (0.0 = beat, 1.0 = next beat)
-float rhythm_get_phase(RhythmState *state);
+float rhythm_get_phase(const RhythmState *state);
 
 // Check if we're on a beat (within tolerance)
-bool rhythm_on_beat(RhythmState *state, float tolerance);
+bool rhythm_on_beat(const RhythmState *state, float tolerance);
 
 // Get current BPM estimate
 float rhythm_get_bpm(RhythmState *state);
@@ -100,6 +100,6 @@ void rhythm_get_bands(RhythmState *state,
                       float *mid, float *high_mid, float *treble);
 
 // Get velocity (rate of change) for bass and treble
-void rhythm_get_velocity(RhythmState *state, float *bass_vel, float *treble_vel);
+void rhythm_get_velocity(const RhythmState *state, float *bass_vel, float *treble_vel);
 
 #endif // RHYTHM_H

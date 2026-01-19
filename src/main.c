@@ -102,13 +102,13 @@ int main(int argc, char *argv[]) {
     config_init(&cfg);
     
     // Load config file if exists
-    char *config_path = config_get_default_path();
+    const char *config_path = config_get_default_path();
     if (config_path) {
         config_load(&cfg, config_path);
     }
     
     // Command line overrides
-    char *source = cfg.audio_source;
+    const char *source = cfg.audio_source;
     int use_pulse = 0;
     int target_fps = cfg.target_fps;
     int show_ground = cfg.show_ground;

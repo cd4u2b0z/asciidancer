@@ -92,9 +92,9 @@ float bpm_tracker_get_stability(BPMTracker *tracker);
 bool bpm_tracker_is_locked(BPMTracker *tracker);
 
 /* Get alternative tempo (half/double time) */
-float bpm_tracker_get_alternative(BPMTracker *tracker, float *confidence);
+float bpm_tracker_get_alternative(const BPMTracker *tracker, float *confidence);
 
 /* Get BPM range (min, max, mean) */
-void bpm_tracker_get_range(BPMTracker *tracker, float *min, float *max, float *mean);
+void bpm_tracker_get_range(const BPMTracker *tracker, float *min, float *max, float *mean);
 
 #endif /* BPM_TRACKER_H */

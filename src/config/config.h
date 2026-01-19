@@ -57,7 +57,6 @@ void config_init(Config *cfg);
 int config_load(Config *cfg, const char *path);
 
 /* Save config to INI file. Returns 0 on success, -1 on error */
-int config_save(const Config *cfg, const char *path);
 
 /* Get default config file path (~/.config/asciidancer/config.ini) */
 char *config_get_default_path(void);
@@ -69,4 +68,3 @@ int config_create_default(const char *path);
 ColorTheme config_theme_from_name(const char *name);
 
 /* Get theme name from enum */
-const char *config_theme_name(ColorTheme theme);

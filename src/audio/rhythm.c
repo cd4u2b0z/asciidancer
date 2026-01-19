@@ -38,7 +38,7 @@ void rhythm_destroy(RhythmState *state) {
 }
 
 // Calculate spectral flux (measure of spectral change between frames)
-static float calculate_spectral_flux(RhythmState *state, float *spectrum, int num_bins) {
+static float calculate_spectral_flux(RhythmState *state, const float *spectrum, int num_bins) {
     float flux = 0.0f;
     int bins_per_band = num_bins / SPECTRAL_BANDS;
     if (bins_per_band < 1) bins_per_band = 1;
@@ -189,7 +189,7 @@ static void update_beat_phase(RhythmState *state, bool onset) {
 }
 
 // Extract enhanced frequency bands from spectrum
-static void extract_bands(RhythmState *state, float *spectrum, int num_bins, float sample_rate) {
+static void extract_bands(RhythmState *state, const float *spectrum, int num_bins, float sample_rate) {
     // Assume sample_rate of 44100 if not specified
     if (sample_rate <= 0) sample_rate = 44100.0f;
     
@@ -305,11 +305,11 @@ void rhythm_update(RhythmState *state, float *spectrum, int num_bins, double dt)
     update_beat_phase(state, state->onset_detected);
 }
 
-float rhythm_get_phase(RhythmState *state) {
+float rhythm_get_phase(const RhythmState *state) {
     return state ? state->beat_phase : 0.0f;
 }
 
-bool rhythm_on_beat(RhythmState *state, float tolerance) {
+bool rhythm_on_beat(const RhythmState *state, float tolerance) {
     if (!state) return false;
     return state->beat_phase < tolerance || state->beat_phase > (1.0f - tolerance);
 }
@@ -347,7 +347,7 @@ void rhythm_get_bands(RhythmState *state,
     if (treble) *treble = state->treble;
 }
 
-void rhythm_get_velocity(RhythmState *state, float *bass_vel, float *treble_vel) {
+void rhythm_get_velocity(const RhythmState *state, float *bass_vel, float *treble_vel) {
     if (!state) {
         if (bass_vel) *bass_vel = 0;
         if (treble_vel) *treble_vel = 0;

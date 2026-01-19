@@ -92,7 +92,6 @@ void dancer_compose_frame(struct dancer_state *state, char *output) {
     double mid = state->mid_intensity;
     double treble = state->treble_intensity;
     double phase = state->phase;
-    double energy = (bass + mid + treble) / 3.0;
     
     // Base position
     int cx = CANVAS_W / 2;

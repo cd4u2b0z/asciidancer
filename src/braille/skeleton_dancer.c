@@ -1786,7 +1786,7 @@ static void generate_pose_variations(SkeletonDancer *d) {
     
     /* First pass: Create mirrored versions of all poses */
     for (int i = 0; i < base_count && d->num_poses < MAX_POSES - 100; i++) {
-        Pose *base = &d->poses[i];
+        const Pose *base = &d->poses[i];
         
         /* Variation 1: Mirrored pose (swap left/right) */
         Pose mirror = *base;
@@ -1844,7 +1844,7 @@ static void generate_pose_variations(SkeletonDancer *d) {
     /* Second pass: Create geometric variations for groove+ poses */
     int after_mirrors = d->num_poses;
     for (int i = 0; i < after_mirrors && d->num_poses < MAX_POSES - 50; i++) {
-        Pose *base = &d->poses[i];
+        const Pose *base = &d->poses[i];
         if (base->category < POSE_CAT_GROOVE) continue;
         
         /* Variation: Arms higher */
@@ -1860,7 +1860,7 @@ static void generate_pose_variations(SkeletonDancer *d) {
     /* Third pass: Create stance variations */
     int after_arms = d->num_poses;
     for (int i = 0; i < after_arms && d->num_poses < MAX_POSES - 50; i++) {
-        Pose *base = &d->poses[i];
+        const Pose *base = &d->poses[i];
         if (base->category < POSE_CAT_GROOVE) continue;
         
         /* Skip some to stay within limits */
@@ -1879,7 +1879,7 @@ static void generate_pose_variations(SkeletonDancer *d) {
     /* Fourth pass: Create crouch variations for energetic+ poses */
     int after_wide = d->num_poses;
     for (int i = 0; i < after_wide && d->num_poses < MAX_POSES - 30; i++) {
-        Pose *base = &d->poses[i];
+        const Pose *base = &d->poses[i];
         if (base->category < POSE_CAT_ENERGETIC) continue;
         if (i % 4 != 0) continue;  /* Every 4th pose */
         
@@ -1900,7 +1900,7 @@ static void generate_pose_variations(SkeletonDancer *d) {
     /* Fifth pass: Create lean variations */
     int after_crouch = d->num_poses;
     for (int i = 0; i < after_crouch && d->num_poses < MAX_POSES - 20; i++) {
-        Pose *base = &d->poses[i];
+        const Pose *base = &d->poses[i];
         if (base->category < POSE_CAT_GROOVE) continue;
         if (i % 5 != 0) continue;  /* Every 5th pose */
         
@@ -1928,7 +1928,7 @@ static void generate_pose_variations(SkeletonDancer *d) {
     /* Sixth pass: Arms forward/back variations for intense poses */
     int after_lean = d->num_poses;
     for (int i = 0; i < after_lean && d->num_poses < MAX_POSES - 10; i++) {
-        Pose *base = &d->poses[i];
+        const Pose *base = &d->poses[i];
         if (base->category < POSE_CAT_INTENSE) continue;
         if (i % 6 != 0) continue;
         
@@ -2061,7 +2061,7 @@ static void analyze_audio(AudioAnalysis *a, float bass, float mid, float treble,
 
 /* ============ Pose Selection ============ */
 
-static bool pose_in_history(SkeletonDancer *d, int pose_idx) {
+static bool pose_in_history(const SkeletonDancer *d, int pose_idx) {
     for (int i = 0; i < POSE_HISTORY; i++) {
         if (d->pose_history[i] == pose_idx) return true;
     }
@@ -2192,7 +2192,7 @@ static int select_best_pose(SkeletonDancer *d) {
     int pose_idx = select_pose_from_category(d, primary_cat);
     
     /* Verify energy range */
-    Pose *p = &d->poses[pose_idx];
+    const Pose *p = &d->poses[pose_idx];
     if (energy < p->energy_min || energy > p->energy_max) {
         /* Try adjacent categories */
         if (primary_cat > 0 && random_float(d) < 0.3f) {
@@ -2278,7 +2278,7 @@ void skeleton_dancer_update(SkeletonDancer *d, float bass, float mid, float treb
         if (fabsf(d->spin_momentum) < 0.05f) d->spin_momentum = 0;
     } else {
         /* Get target facing from current pose */
-        Pose *target_pose = &d->poses[d->pose_secondary];
+        const Pose *target_pose = &d->poses[d->pose_secondary];
         float pose_facing = target_pose->facing;
         
         /* When not spinning, smoothly return toward pose facing */
@@ -2300,7 +2300,7 @@ void skeleton_dancer_update(SkeletonDancer *d, float bass, float mid, float treb
     while (d->facing < -6.28f) { d->facing += 6.28f; d->facing_target += 6.28f; }
     
     /* v3.1: Update dip system */
-    Pose *current_pose = &d->poses[d->pose_secondary];
+    const Pose *current_pose = &d->poses[d->pose_secondary];
     d->dip_target = current_pose->dip_amount;
     /* Strong bass can trigger extra dip */
     if (a->bass > 0.8f && a->bass_velocity > 4.0f) {
@@ -2430,8 +2430,8 @@ void skeleton_dancer_update(SkeletonDancer *d, float bass, float mid, float treb
     float micro_bounce = sinf(d->time_total * 8.0f) * 0.005f * a->bass_smooth * mod_scale;
     
     /* Interpolate base pose */
-    Pose *p1 = &d->poses[d->pose_primary];
-    Pose *p2 = &d->poses[d->pose_secondary];
+    const Pose *p1 = &d->poses[d->pose_primary];
+    const Pose *p2 = &d->poses[d->pose_secondary];
     float eased_blend = ease_in_out_cubic(d->blend);
     
     for (int i = 0; i < JOINT_COUNT; i++) {
@@ -2538,7 +2538,7 @@ void skeleton_dancer_update(SkeletonDancer *d, float bass, float mid, float treb
 
 /* ============ Rendering ============ */
 
-static void joint_to_pixel(SkeletonDancer *d, Joint j, int *px, int *py) {
+static void joint_to_pixel(const SkeletonDancer *d, Joint j, int *px, int *py) {
     /* v3.1: Apply facing direction (affects x scale) and dip (affects y offset) */
     float facing_scale = cosf(d->facing);  /* 1.0 when facing forward, 0 when sideways, -1 when back */
     float dip_offset = d->dip * 0.15f;     /* Dip lowers the whole body */
@@ -2563,7 +2563,7 @@ void skeleton_dancer_render(SkeletonDancer *d, BrailleCanvas *canvas) {
     
     /* Draw bones */
     for (int i = 0; i < d->skeleton.num_bones; i++) {
-        Bone *bone = &d->skeleton.bones[i];
+        const Bone *bone = &d->skeleton.bones[i];
         
         int x1, y1, x2, y2;
         joint_to_pixel(d, d->current[bone->from], &x1, &y1);
@@ -2903,8 +2903,8 @@ void skeleton_dancer_update_with_phase(SkeletonDancer *d,
     float knee_pump = beat_bounce * 0.04f * bass_intensity * mod_scale;
     
     /* Interpolate base pose */
-    Pose *p1 = &d->poses[d->pose_primary];
-    Pose *p2 = &d->poses[d->pose_secondary];
+    const Pose *p1 = &d->poses[d->pose_primary];
+    const Pose *p2 = &d->poses[d->pose_secondary];
     float eased_blend = ease_in_out_cubic(d->blend);
     
     for (int i = 0; i < JOINT_COUNT; i++) {

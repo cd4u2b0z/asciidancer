@@ -94,7 +94,7 @@ void frame_recorder_start(FrameRecorder *recorder) {
     
     /* Create timestamped subdirectory */
     time_t now = time(NULL);
-    struct tm *t = localtime(&now);
+    const struct tm *t = localtime(&now);
     char subdir[sizeof(recorder->output_dir)];
     int written = snprintf(subdir, sizeof(subdir), "%s/recording_%04d%02d%02d_%02d%02d%02d",
              recorder->output_dir,

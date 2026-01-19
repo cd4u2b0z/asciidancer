@@ -366,7 +366,7 @@ ParticleSystem* dancer_get_particle_system(void) {
     return effects ? effects_get_particle_system(effects) : NULL;
 }
 
-void calculate_bands(double *cava_out, int num_bars,
+void calculate_bands(const double *cava_out, int num_bars,
                      double *bass, double *mid, double *treble) {
     *bass = *mid = *treble = 0.0;
     if (num_bars < 3) return;

@@ -118,28 +118,28 @@ void energy_analyzer_update_pace(EnergyAnalyzer *analyzer,
 /* ============ Queries ============ */
 
 /* Get current RMS energy (0-1) */
-float energy_analyzer_get_rms(EnergyAnalyzer *analyzer);
+float energy_analyzer_get_rms(const EnergyAnalyzer *analyzer);
 
 /* Get smoothed energy with envelope (0-1) */
-float energy_analyzer_get_smoothed(EnergyAnalyzer *analyzer);
+float energy_analyzer_get_smoothed(const EnergyAnalyzer *analyzer);
 
 /* Get current intensity zone */
-IntensityZone energy_analyzer_get_zone(EnergyAnalyzer *analyzer);
+IntensityZone energy_analyzer_get_zone(const EnergyAnalyzer *analyzer);
 
 /* Get zone as string ("Low", "Medium", etc) */
-const char* energy_analyzer_get_zone_name(EnergyAnalyzer *analyzer);
+const char* energy_analyzer_get_zone_name(const EnergyAnalyzer *analyzer);
 
 /* Get zone confidence (0-1) */
-float energy_analyzer_get_zone_confidence(EnergyAnalyzer *analyzer);
+float energy_analyzer_get_zone_confidence(const EnergyAnalyzer *analyzer);
 
 /* Get pace intensity (combined tempo + energy, 0-1) */
-float energy_analyzer_get_pace(EnergyAnalyzer *analyzer);
+float energy_analyzer_get_pace(const EnergyAnalyzer *analyzer);
 
 /* Get dynamic range in dB */
-float energy_analyzer_get_dynamic_range(EnergyAnalyzer *analyzer);
+float energy_analyzer_get_dynamic_range(const EnergyAnalyzer *analyzer);
 
 /* Get spectral brightness (0-1) */
-float energy_analyzer_get_brightness(EnergyAnalyzer *analyzer);
+float energy_analyzer_get_brightness(const EnergyAnalyzer *analyzer);
 
 /* Get energy history for visualization */
 const float* energy_analyzer_get_history(EnergyAnalyzer *analyzer, int *size);

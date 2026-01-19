@@ -131,7 +131,7 @@ void ui_reactive_update(UIReactive *ui,
 
 /* ============ Rendering ============ */
 
-static void ui_render_border(UIReactive *ui) {
+static void ui_render_border(const UIReactive *ui) {
     if (!ui || !ui->visible.show_border) return;
     
     int w = ui->screen_width;
@@ -159,7 +159,7 @@ static void ui_render_border(UIReactive *ui) {
     mvprintw(h - 1, w - 1, "%s", corner_br[style]);
 }
 
-static void ui_render_energy_meter(UIReactive *ui, int x, int y, int width) {
+static void ui_render_energy_meter(const UIReactive *ui, int x, int y, int width) {
     if (!ui || !ui->visible.show_energy_meter || width < 3) return;
     
     /* Calculate fill */
@@ -197,13 +197,13 @@ static void ui_render_beat_indicator(UIReactive *ui, int x, int y) {
     mvprintw(y, x, "%s", beat_frames[ui->beat_frame]);
 }
 
-static void ui_render_bpm_display(UIReactive *ui, int x, int y) {
+static void ui_render_bpm_display(const UIReactive *ui, int x, int y) {
     if (!ui || !ui->visible.show_bpm) return;
     
     mvprintw(y, x, "%.0f BPM", ui->bpm_display);
 }
 
-static void ui_render_spectrum_mini(UIReactive *ui, int x, int y, int width) {
+static void ui_render_spectrum_mini(const UIReactive *ui, int x, int y, int width) {
     if (!ui || width < 6) return;
     
     /* 3-band mini spectrum */

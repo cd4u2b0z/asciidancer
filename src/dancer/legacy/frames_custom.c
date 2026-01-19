@@ -99,7 +99,7 @@ int dancer_load_frames(void) {
     return num_frames;
 }
 
-const wchar_t* dancer_get_frame_line(int frame_idx, int line_idx) {
+static const wchar_t* dancer_get_frame_line(int frame_idx, int line_idx) {
     if (!frame_loaded) dancer_load_frames();
     if (frame_idx < 0 || frame_idx >= num_frames) frame_idx = 0;
     if (line_idx < 0 || line_idx >= FILE_FRAME_HEIGHT) return L"";

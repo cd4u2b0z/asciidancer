@@ -122,11 +122,11 @@ int braille_canvas_to_utf8(BrailleCanvas *canvas, int row, char *out, int max_le
 
 /* ============ Pixel Operations ============ */
 
-static inline int pixel_index(BrailleCanvas *canvas, int x, int y) {
+static inline int pixel_index(const BrailleCanvas *canvas, int x, int y) {
     return y * canvas->pixel_width + x;
 }
 
-static inline int in_bounds(BrailleCanvas *canvas, int x, int y) {
+static inline int in_bounds(const BrailleCanvas *canvas, int x, int y) {
     return x >= 0 && x < canvas->pixel_width && 
            y >= 0 && y < canvas->pixel_height;
 }

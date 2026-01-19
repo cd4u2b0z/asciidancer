@@ -113,7 +113,7 @@ ColorTheme config_theme_from_name(const char *name) {
 }
 
 /* Get theme name from enum */
-const char *config_theme_name(ColorTheme theme) {
+static const char *config_theme_name(ColorTheme theme) {
     switch (theme) {
         case THEME_FIRE:      return "fire";
         case THEME_ICE:       return "ice";
@@ -211,7 +211,7 @@ int config_load(Config *cfg, const char *path) {
 }
 
 /* Save config to INI file */
-int config_save(const Config *cfg, const char *path) {
+static int config_save(const Config *cfg, const char *path) {
     if (!cfg || !path) return -1;
     
     /* Create directory if needed */

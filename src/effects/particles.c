@@ -447,7 +447,7 @@ void particles_render(ParticleSystem *ps, BrailleCanvas *canvas) {
     if (!ps || !ps->enabled || !canvas) return;
     
     for (int i = 0; i < MAX_PARTICLES; i++) {
-        Particle *p = &ps->particles[i];
+        const Particle *p = &ps->particles[i];
         if (!p->active) continue;
         
         int px = (int)(p->x + 0.5f);

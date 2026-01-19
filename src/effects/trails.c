@@ -46,7 +46,7 @@ static void trails_track_all_limbs(MotionTrails *trails) {
     if (!trails) return;
     
     /* Track: hands, feet, elbows, knees */
-    int limb_joints[] = {
+    const int limb_joints[] = {
         JOINT_HAND_L,
         JOINT_HAND_R,
         JOINT_FOOT_L,
@@ -118,7 +118,7 @@ void trails_render(MotionTrails *trails, BrailleCanvas *canvas) {
         JointTrail *trail = &trails->joints[t];
         
         /* Find valid points and sort by age */
-        TrailPoint *prev = NULL;
+        const TrailPoint *prev = NULL;
         
         for (int i = 0; i < TRAIL_HISTORY_SIZE; i++) {
             /* Read from oldest to newest */

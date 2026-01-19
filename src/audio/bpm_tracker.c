@@ -258,13 +258,13 @@ bool bpm_tracker_is_locked(BPMTracker *tracker) {
     return tracker ? tracker->tempo_locked : false;
 }
 
-float bpm_tracker_get_alternative(BPMTracker *tracker, float *confidence) {
+float bpm_tracker_get_alternative(const BPMTracker *tracker, float *confidence) {
     if (!tracker) return 120.0f;
     if (confidence) *confidence = tracker->alt_confidence;
     return tracker->alternative_bpm;
 }
 
-void bpm_tracker_get_range(BPMTracker *tracker, float *min, float *max, float *mean) {
+void bpm_tracker_get_range(const BPMTracker *tracker, float *min, float *max, float *mean) {
     if (!tracker) return;
     if (min) *min = tracker->min_bpm;
     if (max) *max = tracker->max_bpm;

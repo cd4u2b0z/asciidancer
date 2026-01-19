@@ -302,19 +302,19 @@ void energy_analyzer_update_pace(EnergyAnalyzer *analyzer,
     analyzer->transient_density = transient_count;
 }
 
-float energy_analyzer_get_rms(EnergyAnalyzer *analyzer) {
+float energy_analyzer_get_rms(const EnergyAnalyzer *analyzer) {
     return analyzer ? analyzer->rms_energy : 0.0f;
 }
 
-float energy_analyzer_get_smoothed(EnergyAnalyzer *analyzer) {
+float energy_analyzer_get_smoothed(const EnergyAnalyzer *analyzer) {
     return analyzer ? analyzer->smoothed_energy : 0.0f;
 }
 
-IntensityZone energy_analyzer_get_zone(EnergyAnalyzer *analyzer) {
+IntensityZone energy_analyzer_get_zone(const EnergyAnalyzer *analyzer) {
     return analyzer ? analyzer->current_zone : ZONE_SILENT;
 }
 
-const char* energy_analyzer_get_zone_name(EnergyAnalyzer *analyzer) {
+const char* energy_analyzer_get_zone_name(const EnergyAnalyzer *analyzer) {
     if (!analyzer) return "Unknown";
     
     switch (analyzer->current_zone) {
@@ -327,19 +327,19 @@ const char* energy_analyzer_get_zone_name(EnergyAnalyzer *analyzer) {
     }
 }
 
-float energy_analyzer_get_zone_confidence(EnergyAnalyzer *analyzer) {
+float energy_analyzer_get_zone_confidence(const EnergyAnalyzer *analyzer) {
     return analyzer ? analyzer->zone_confidence : 0.0f;
 }
 
-float energy_analyzer_get_pace(EnergyAnalyzer *analyzer) {
+float energy_analyzer_get_pace(const EnergyAnalyzer *analyzer) {
     return analyzer ? analyzer->pace_intensity : 0.0f;
 }
 
-float energy_analyzer_get_dynamic_range(EnergyAnalyzer *analyzer) {
+float energy_analyzer_get_dynamic_range(const EnergyAnalyzer *analyzer) {
     return analyzer ? analyzer->dynamic_range : 0.0f;
 }
 
-float energy_analyzer_get_brightness(EnergyAnalyzer *analyzer) {
+float energy_analyzer_get_brightness(const EnergyAnalyzer *analyzer) {
     if (!analyzer) return 0.0f;
     /* Normalize spectral centroid to 0-1 (assuming 0-10kHz range) */
     return fminf(1.0f, analyzer->spectral_centroid / 10000.0f);

@@ -28,22 +28,22 @@ int write_to_cava_input_buffers(int16_t size, unsigned char *buf, void *data) {
     for (int i = 0; i < (int)(samples * audio->channels); i++) {
         switch (bytes_per_sample) {
         case 1: {
-            uint8_t *buf8 = (uint8_t *)&buf[n];
+            const uint8_t *buf8 = (const uint8_t *)&buf[n];
             audio->cava_in[i + audio->samples_counter] = *buf8 * UCHAR_MAX;
             break;
         }
         case 3:
         case 4:
             if (audio->IEEE_FLOAT) {
-                float *ieee_float = (float *)&buf[n];
+                const float *ieee_float = (const float *)&buf[n];
                 audio->cava_in[i + audio->samples_counter] = *ieee_float * USHRT_MAX;
             } else {
-                int32_t *buf32 = (int32_t *)&buf[n];
+                const int32_t *buf32 = (const int32_t *)&buf[n];
                 audio->cava_in[i + audio->samples_counter] = (double)*buf32 / USHRT_MAX;
             }
             break;
         default: {
-            int16_t *buf16 = (int16_t *)&buf[n];
+            const int16_t *buf16 = (const int16_t *)&buf[n];
             audio->cava_in[i + audio->samples_counter] = *buf16;
             break;
         }
