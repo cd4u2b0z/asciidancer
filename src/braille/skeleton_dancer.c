@@ -940,10 +940,27 @@ void skeleton_dancer_update_with_phase(SkeletonDancer *d,
     
     /* Use beat_phase for more precise beat-triggered transitions */
     /* Trigger near the beat (phase close to 0 or 1) */
-    bool on_beat = (beat_phase < 0.08f || beat_phase > 0.92f);
+    bool on_beat = (beat_phase < 0.1f || beat_phase > 0.9f);
+    bool on_half_beat = (beat_phase > 0.45f && beat_phase < 0.55f);
     
-    if (!is_silent && on_beat && a->energy_smooth > 0.4f && d->time_in_pose > 0.15f) {
-        if (random_float(d) < 0.5f) {  /* Higher chance for rhythm-locked transitions */
+    /* High energy = more frequent pose changes on beats AND half-beats */
+    if (!is_silent && on_beat && d->time_in_pose > 0.12f) {
+        float transition_chance = 0.3f + a->energy_smooth * 0.5f;  /* 30-80% chance */
+        if (random_float(d) < transition_chance) {
+            should_transition = true;
+        }
+    }
+    
+    /* At very high energy, also transition on half-beats */
+    if (!is_silent && on_half_beat && a->energy_smooth > 0.6f && d->time_in_pose > 0.1f) {
+        if (random_float(d) < 0.4f) {
+            should_transition = true;
+        }
+    }
+    
+    /* Sudden bass hit = instant pose change */
+    if (!is_silent && a->bass_smooth > 0.7f && d->time_in_pose > 0.15f) {
+        if (random_float(d) < 0.6f) {
             should_transition = true;
         }
     }
@@ -956,37 +973,62 @@ void skeleton_dancer_update_with_phase(SkeletonDancer *d,
         d->blend = 0;
     }
     
-    /* Update blend - faster at high energy for snappier movements */
-    float blend_speed = 4.0f + a->energy_smooth * 5.0f;
+    /* Update blend - MUCH faster at high energy for snappy movements */
+    float blend_speed = 3.0f + a->energy_smooth * 12.0f;  /* Range: 3-15 */
     d->blend += dt * blend_speed;
     if (d->blend > 1.0f) d->blend = 1.0f;
     
     /* Use beat_phase for rhythmic modifiers - but only when not silent */
     float beat_sin = sinf(beat_phase * 2.0f * M_PI);  /* Oscillates with beat */
-    float beat_bounce = (beat_phase < 0.1f) ? (1.0f - beat_phase * 10.0f) : 0.0f;
+    float beat_cos = cosf(beat_phase * 2.0f * M_PI);
+    float beat_bounce = (beat_phase < 0.15f) ? (1.0f - beat_phase * 6.67f) : 0.0f;
     
-    /* Scale all modifiers by energy (becomes 0 when silent) */
-    float mod_scale = is_silent ? 0.0f : 1.0f;
+    /* Energy-based intensity multiplier - makes movements MUCH bigger at high energy */
+    float intensity = 0.3f + a->energy_smooth * 2.5f;  /* Range: 0.3 to 2.8 */
+    float bass_intensity = 0.5f + a->bass_smooth * 2.0f;
+    float treble_intensity = 0.5f + a->treble_smooth * 2.0f;
     
-    /* Head bob - locked to beat phase */
-    float target_bob = beat_sin * 0.015f * a->mid_smooth * mod_scale;
-    d->head_bob = d->head_bob * 0.85f + target_bob * 0.15f;
+    /* Scale all modifiers by energy (becomes subtle breathing when silent) */
+    float mod_scale = is_silent ? 0.1f : 1.0f;  /* Keep tiny movement when silent */
     
-    /* Arm swing - quarter beat offset for groove feel */
+    /* Subtle idle breathing animation when silent */
+    float breathe = sinf(d->time_total * 1.5f) * 0.005f;
+    
+    /* Head bob - locked to beat phase, MUCH more pronounced */
+    float target_bob = beat_sin * 0.05f * a->mid_smooth * intensity * mod_scale;
+    if (is_silent) target_bob = breathe;  /* Gentle breathing when quiet */
+    d->head_bob = d->head_bob * 0.75f + target_bob * 0.25f;  /* Faster response */
+    
+    /* Arm swing - quarter beat offset for groove feel, MORE dynamic */
     float arm_phase = beat_phase + 0.25f;  /* Offset by quarter beat */
     if (arm_phase > 1.0f) arm_phase -= 1.0f;
-    d->arm_swing_l = sinf(arm_phase * 2.0f * M_PI) * 0.025f * a->treble_smooth * mod_scale;
-    d->arm_swing_r = sinf((arm_phase + 0.5f) * 2.0f * M_PI) * 0.025f * a->treble_smooth * mod_scale;
+    float arm_base = sinf(arm_phase * 2.0f * M_PI);
+    float arm_double = sinf(arm_phase * 4.0f * M_PI) * 0.3f;  /* Double-time accent */
+    d->arm_swing_l = (arm_base + arm_double) * 0.06f * treble_intensity * mod_scale;
+    d->arm_swing_r = (sinf((arm_phase + 0.5f) * 2.0f * M_PI) - arm_double) * 0.06f * treble_intensity * mod_scale;
     
-    /* Hip sway - half beat timing */
-    d->hip_sway = sinf(beat_phase * M_PI) * 0.02f * a->bass_smooth * mod_scale;
+    /* Hip sway - MUCH more pronounced, figure-8 motion */
+    float hip_x = sinf(beat_phase * 2.0f * M_PI) * 0.05f * bass_intensity * mod_scale;
+    float hip_y = sinf(beat_phase * 4.0f * M_PI) * 0.02f * bass_intensity * mod_scale;
+    d->hip_sway = hip_x;
     
-    /* Bounce - sharper attack on beat, locked to phase */
-    float target_bounce = beat_bounce * 0.04f * a->energy_smooth * mod_scale;
-    d->bounce = d->bounce * 0.8f + target_bounce * 0.2f;
+    /* Bounce - sharper attack on beat, BIG bounces on bass hits */
+    float target_bounce = beat_bounce * 0.08f * intensity * mod_scale;
+    /* Extra bounce on detected bass */
+    if (!is_silent && a->bass_smooth > 0.5f) {
+        target_bounce += 0.04f * a->bass_smooth;
+    }
+    d->bounce = d->bounce * 0.7f + target_bounce * 0.3f;  /* Faster attack */
     
-    /* Lean - follows spectral centroid */
-    d->lean = (a->spectral_centroid - 0.5f) * 0.02f * mod_scale;
+    /* Lean - follows spectral centroid with more range */
+    float target_lean = (a->spectral_centroid - 0.5f) * 0.06f * intensity * mod_scale;
+    d->lean = d->lean * 0.8f + target_lean * 0.2f;
+    
+    /* Shoulder shimmy - new! Reacts to high frequencies */
+    float shoulder_shimmy = beat_cos * 0.03f * a->treble_smooth * treble_intensity * mod_scale;
+    
+    /* Knee pump - new! Extra bounce for the lower body */
+    float knee_pump = beat_bounce * 0.04f * bass_intensity * mod_scale;
     
     /* Interpolate base pose */
     Pose *p1 = &d->poses[d->pose_primary];
@@ -997,33 +1039,62 @@ void skeleton_dancer_update_with_phase(SkeletonDancer *d,
         /* Base interpolation */
         Joint target = joint_lerp(p1->joints[i], p2->joints[i], eased_blend);
         
-        /* Apply rhythmic modifiers */
+        /* Apply rhythmic modifiers - MORE COMPREHENSIVE */
         if (i == JOINT_HEAD) {
-            target.y += d->head_bob - d->bounce;
-        } else if (i == JOINT_HAND_L || i == JOINT_ELBOW_L) {
+            target.y += d->head_bob - d->bounce * 0.8f;
+            target.x += shoulder_shimmy * 0.3f;  /* Head follows shoulders slightly */
+        } else if (i == JOINT_SHOULDER_L) {
+            target.y += shoulder_shimmy;
+            target.y -= d->bounce * 0.5f;
+        } else if (i == JOINT_SHOULDER_R) {
+            target.y -= shoulder_shimmy;
+            target.y -= d->bounce * 0.5f;
+        } else if (i == JOINT_HAND_L) {
             target.x += d->arm_swing_l;
-        } else if (i == JOINT_HAND_R || i == JOINT_ELBOW_R) {
+            target.y += d->arm_swing_l * 0.5f;  /* Arms move in arc */
+        } else if (i == JOINT_HAND_R) {
             target.x += d->arm_swing_r;
-        } else if (i == JOINT_HIP_CENTER || i == JOINT_HIP_L || i == JOINT_HIP_R) {
+            target.y += d->arm_swing_r * 0.5f;
+        } else if (i == JOINT_ELBOW_L) {
+            target.x += d->arm_swing_l * 0.6f;
+        } else if (i == JOINT_ELBOW_R) {
+            target.x += d->arm_swing_r * 0.6f;
+        } else if (i == JOINT_HIP_CENTER) {
             target.x += d->hip_sway;
+            target.y += hip_y;  /* Figure-8 motion */
+        } else if (i == JOINT_HIP_L) {
+            target.x += d->hip_sway + 0.01f;
+            target.y += hip_y * 0.8f;
+        } else if (i == JOINT_HIP_R) {
+            target.x += d->hip_sway - 0.01f;
+            target.y += hip_y * 0.8f;
+        } else if (i == JOINT_KNEE_L || i == JOINT_KNEE_R) {
+            target.y += knee_pump;  /* Knees bend with beat */
+        } else if (i == JOINT_FOOT_L || i == JOINT_FOOT_R) {
+            target.y += knee_pump * 0.5f;
         }
         
         /* Global bounce and lean */
-        target.y -= d->bounce * 0.5f;
+        target.y -= d->bounce * 0.6f;
         target.x += d->lean;
         
         /* Update physics */
         d->physics[i].target = target;
         
-        /* Slightly stiffer physics for tighter response */
-        float stiffness = 18.0f + a->energy_smooth * 12.0f;
-        float damping = 9.0f;
+        /* Dynamic physics - loose and flowy at low energy, snappy at high */
+        float stiffness = 12.0f + a->energy_smooth * 25.0f;  /* Range: 12-37 */
+        float damping = 6.0f + a->energy_smooth * 6.0f;      /* Range: 6-12 */
         
-        /* Extremities still looser */
-        if (i == JOINT_HAND_L || i == JOINT_HAND_R || 
-            i == JOINT_FOOT_L || i == JOINT_FOOT_R) {
+        /* Extremities are looser for natural follow-through */
+        if (i == JOINT_HAND_L || i == JOINT_HAND_R) {
+            stiffness *= 0.5f;
+            damping *= 0.6f;
+        } else if (i == JOINT_FOOT_L || i == JOINT_FOOT_R) {
+            stiffness *= 0.6f;
+            damping *= 0.7f;
+        } else if (i == JOINT_ELBOW_L || i == JOINT_ELBOW_R) {
             stiffness *= 0.7f;
-            damping *= 0.8f;
+            damping *= 0.75f;
         }
         
         d->physics[i].stiffness = stiffness;
