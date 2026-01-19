@@ -8,6 +8,12 @@
 
 **Latest:** 228 base poses 󰸞 Genre-specific dance styles 󰝚 Moonwalk, ballet, breakdance, and more
 
+---
+
+**Topics:** `terminal` · `audio-visualizer` · `music-visualization` · `ascii-art` · `braille` · `ncurses` · `fft` · `c` · `tui` · `real-time` · `audio-reactive` · `linux` · `macos` · `animation` · `particle-effects` · `dancing` · `pipewire` · `pulseaudio` · `coreaudio`
+
+---
+
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
 ![macOS](https://img.shields.io/badge/macOS-000000?style=flat&logo=apple&logoColor=white)
 ![C](https://img.shields.io/badge/C-A8B9CC?style=flat&logo=c&logoColor=black)
@@ -402,9 +408,30 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
+## 󰓎 Contributing
+
+Contributions are welcome! Whether it's:
+- 󰋄 New dance poses or genres
+- 󰎈 Audio backend improvements
+- 󱐋 Visual effects and themes
+- 󰃢 Bug fixes and optimizations
+- 󰈙 Documentation improvements
+
+Feel free to open issues or submit pull requests!
+
+---
+
+## 󰓎 Keywords
+
+**For Discoverability:** terminal audio visualizer, ascii art music visualization, braille graphics, ncurses dancing character, real-time audio reactive animation, FFT music visualizer, TUI audio spectrum, command line music visualizer, terminal music player visualization, audio driven ascii art, unicode braille animation, terminal particles, CLI music visualizer, PipeWire visualizer, PulseAudio visualizer, CoreAudio visualizer, Linux music visualization, macOS terminal visualizer, beat detection visualization, genre-aware dancer
+
+---
+
 <div align="center">
 
 **"Code dances when the music plays."**
+
+**⭐ Star this repo if you enjoy terminal art! ⭐**
 
 </div>
 
