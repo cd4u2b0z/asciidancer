@@ -14,11 +14,17 @@ Enter
 Sleep 1s
 
 # Let it dance with all effects enabled
-Sleep 6s
+Sleep 4s
+
+# Trigger some spins!
+Type "]"
+Sleep 2s
+Type "["
+Sleep 2s
+Type "]"
+Sleep 1.5s
 
 # Cycle through themes to show variety
-Type "t"
-Sleep 2s
 Type "t"
 Sleep 2s
 Type "t"
@@ -36,6 +42,12 @@ Sleep 1.5s
 Type "m"
 Sleep 1.5s
 
+# More spins with effects
+Type "]"
+Sleep 1.5s
+Type "]"
+Sleep 1.5s
+
 # Cycle background effects
 Type "e"
 Sleep 2s
@@ -48,9 +60,9 @@ Sleep 2s
 Type "?"
 Sleep 1s
 
-# Final dance showcase
-Sleep 4s
+# Final dance with spin
+Type "]"
+Sleep 3s
 
-# Quit gracefully
 Type "q"
 Sleep 500ms
