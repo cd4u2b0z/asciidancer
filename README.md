@@ -125,6 +125,16 @@ make braille
 make
 ```
 
+### 󱁤 Make Targets
+
+```bash
+make help      # Show all available targets
+make info      # Display build info (version, hash, date)
+make run       # Build and run braille dancer
+make debug     # Build with debug symbols (-g -O0)
+make clean     # Remove build artifacts
+```
+
 **macOS Notes:**
 - Uses CoreAudio for audio capture (automatic detection)
 - May require Xcode Command Line Tools: `xcode-select --install`

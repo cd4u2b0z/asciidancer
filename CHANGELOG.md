@@ -5,6 +5,27 @@ All notable changes to ASCII Dancer will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 󰆍 v3.2.3 - Build System Improvements (January 2026)
+
+### 󰆍 Makefile Enhancements
+- **Version embedding** — VERSION, GIT_HASH, BUILD_DATE via $(shell ...) in binary
+- **make help** — Shows all available build targets
+- **make info** — Displays build configuration (OS, compiler, audio backends)
+- **make run** — Build braille dancer and run immediately
+- **make debug** — Build with -O0 -DDEBUG and launch in gdb
+
+### 󰣇 macOS Support (v3.2.2)
+- **CoreAudio backend** — Native audio capture via AudioQueue API
+- **Cross-platform Makefile** — Automatic Darwin/Linux detection
+- **Homebrew paths** — Apple Silicon and Intel ncurses support
+
+### 󰧹 Code Quality (v3.2.1)
+- **Thread-safe profiler** — _Atomic for cross-thread timing
+- **Centralized constants** — constants.h with ~150 tuning parameters
+- **Scanline flood fill** — Bounded O(4096) memory allocation
+
+---
+
 ## 💃 v3.2.0 - Dance Revolution (January 2026)
 
 ### 🕺 New Dance Styles

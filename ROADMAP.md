@@ -69,6 +69,11 @@ Development roadmap and feature tracking for asciidancer.
 - [x] **Centralized constants** — New `constants.h` with ~150 tuning parameters
 - [x] **Scanline flood fill** — Bounded O(4096) memory vs previous O(width*height)
 
+### 󰆍 Build System (v3.2.3)
+- [x] **Version strings** — Git version, hash, and build date embedded via $(shell ...)
+- [x] **Make targets** — Added help, info, run, debug phony targets
+- [x] **Developer workflow** — make run builds and runs, make debug launches gdb
+
 ### 󰣇 Platform Support (v3.2.2)
 - [x] **macOS CoreAudio backend** — Native audio capture via AudioQueue API
 - [x] **Cross-platform Makefile** — Automatic OS detection and framework linking
