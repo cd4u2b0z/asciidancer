@@ -8,6 +8,7 @@
 #include <time.h>
 #include <ncurses.h>
 #include <math.h>
+#include <stdatomic.h>
 
 static double get_time_ms(void) {
     struct timespec ts;
@@ -32,18 +33,19 @@ void profiler_destroy(Profiler *prof) {
     if (prof) free(prof);
 }
 
-static double frame_start_time = 0.0;
+/* Thread-safe frame timing using atomic operations */
+static _Atomic double frame_start_time = 0.0;
 
 void profiler_frame_start(Profiler *prof) {
     if (!prof) return;
-    frame_start_time = get_time_ms();
+    atomic_store(&frame_start_time, get_time_ms());
 }
 
 void profiler_frame_end(Profiler *prof) {
     if (!prof) return;
     
     double frame_end = get_time_ms();
-    double frame_time = frame_end - frame_start_time;
+    double frame_time = frame_end - atomic_load(&frame_start_time);
     
     /* Store frame time */
     prof->frame_times[prof->frame_index] = frame_time;

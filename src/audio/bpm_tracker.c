@@ -3,15 +3,17 @@
  */
 
 #include "bpm_tracker.h"
+#include "../constants.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-#define MIN_BPM 40.0f
-#define MAX_BPM 240.0f
-#define SMOOTHING_FACTOR 0.15f      /* Low-pass filter alpha */
-#define STABILITY_THRESHOLD 0.75f   /* Required for tempo lock */
-#define CONFIDENCE_THRESHOLD 0.7f   /* Required for tempo lock */
+/* Local aliases from constants.h for clarity */
+#define MIN_BPM             BPM_MIN
+#define MAX_BPM             BPM_MAX
+#define SMOOTHING_FACTOR    TEMPO_SMOOTHING
+#define STABILITY_THRESHOLD TEMPO_STABILITY_REQ
+#define CONFIDENCE_THRESHOLD TEMPO_LOCK_THRESHOLD
 
 /* Calculate inter-tap intervals and cluster them */
 static void analyze_taps(BPMTracker *tracker) {

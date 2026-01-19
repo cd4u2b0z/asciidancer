@@ -392,36 +392,96 @@ void braille_draw_thick_line(BrailleCanvas *canvas,
     braille_fill_circle(canvas, x2, y2, half);
 }
 
-/* Simple flood fill (recursive, be careful with large areas) */
+/*
+ * Scanline flood fill algorithm with bounded memory usage.
+ * 
+ * Instead of allocating worst-case width*height, we use a fixed-size
+ * queue and process scanlines. This is both faster and uses O(height)
+ * memory in the worst case for the queue, rather than O(width*height).
+ */
+#define FLOOD_FILL_QUEUE_SIZE 4096
+
 void braille_flood_fill(BrailleCanvas *canvas, int x, int y, bool fill_value) {
     if (!canvas || !in_bounds(canvas, x, y)) return;
     
-    bool current = braille_get_pixel(canvas, x, y);
-    if (current == fill_value) return;
+    bool target_value = braille_get_pixel(canvas, x, y);
+    if (target_value == fill_value) return;
     
-    /* Use stack-based approach to avoid stack overflow */
+    /* Fixed-size circular queue for scanline seeds */
     typedef struct { int x, y; } Point;
-    Point *stack = malloc(canvas->pixel_width * canvas->pixel_height * sizeof(Point));
-    if (!stack) return;
+    Point *queue = malloc(FLOOD_FILL_QUEUE_SIZE * sizeof(Point));
+    if (!queue) return;
     
-    int top = 0;
-    stack[top++] = (Point){x, y};
+    int head = 0, tail = 0;
+    int queue_size = 0;
     
-    while (top > 0) {
-        Point p = stack[--top];
+    /* Helper macro for queue operations */
+    #define ENQUEUE(px, py) do { \
+        if (queue_size < FLOOD_FILL_QUEUE_SIZE) { \
+            queue[tail] = (Point){px, py}; \
+            tail = (tail + 1) % FLOOD_FILL_QUEUE_SIZE; \
+            queue_size++; \
+        } \
+    } while(0)
+    
+    #define DEQUEUE(p) do { \
+        p = queue[head]; \
+        head = (head + 1) % FLOOD_FILL_QUEUE_SIZE; \
+        queue_size--; \
+    } while(0)
+    
+    ENQUEUE(x, y);
+    
+    while (queue_size > 0) {
+        Point seed;
+        DEQUEUE(seed);
         
-        if (!in_bounds(canvas, p.x, p.y)) continue;
-        if (braille_get_pixel(canvas, p.x, p.y) != current) continue;
+        /* Skip if already filled or out of bounds */
+        if (!in_bounds(canvas, seed.x, seed.y)) continue;
+        if (braille_get_pixel(canvas, seed.x, seed.y) != target_value) continue;
         
-        braille_set_pixel(canvas, p.x, p.y, fill_value);
+        /* Find left edge of this scanline segment */
+        int left = seed.x;
+        while (left > 0 && braille_get_pixel(canvas, left - 1, seed.y) == target_value) {
+            left--;
+        }
         
-        if (p.x > 0) stack[top++] = (Point){p.x - 1, p.y};
-        if (p.x < canvas->pixel_width - 1) stack[top++] = (Point){p.x + 1, p.y};
-        if (p.y > 0) stack[top++] = (Point){p.x, p.y - 1};
-        if (p.y < canvas->pixel_height - 1) stack[top++] = (Point){p.x, p.y + 1};
+        /* Find right edge of this scanline segment */
+        int right = seed.x;
+        while (right < canvas->pixel_width - 1 && 
+               braille_get_pixel(canvas, right + 1, seed.y) == target_value) {
+            right++;
+        }
+        
+        /* Fill the entire scanline segment */
+        for (int i = left; i <= right; i++) {
+            braille_set_pixel(canvas, i, seed.y, fill_value);
+        }
+        
+        /* Scan the line above and below for new segments to fill */
+        for (int dy = -1; dy <= 1; dy += 2) {
+            int ny = seed.y + dy;
+            if (ny < 0 || ny >= canvas->pixel_height) continue;
+            
+            bool in_segment = false;
+            for (int i = left; i <= right; i++) {
+                bool is_target = braille_get_pixel(canvas, i, ny) == target_value;
+                
+                if (is_target && !in_segment) {
+                    /* Start of a new segment - add seed point */
+                    ENQUEUE(i, ny);
+                    in_segment = true;
+                } else if (!is_target) {
+                    in_segment = false;
+                }
+            }
+        }
     }
     
-    free(stack);
+    #undef ENQUEUE
+    #undef DEQUEUE
+    
+    free(queue);
 }
 
 void braille_copy_region(BrailleCanvas *dst, int dx, int dy,

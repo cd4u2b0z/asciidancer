@@ -3,13 +3,14 @@
  */
 
 #include "energy_analyzer.h"
+#include "../constants.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 #define ATTACK_TIME_DEFAULT 0.01f   /* 10ms attack */
 #define RELEASE_TIME_DEFAULT 0.3f   /* 300ms release */
-#define DB_FLOOR -60.0f
+/* DB_FLOOR defined in constants.h */
 
 /* Convert amplitude to dB */
 static float amp_to_db(float amp) {
