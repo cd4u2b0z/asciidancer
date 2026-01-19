@@ -1,6 +1,7 @@
-# ASCII Dancer Makefile v2.4
+# ASCII Dancer Makefile v3.0
 # Supports config files, 256-color themes, ground/shadow effects
 # v2.4: Control bus, UI reactivity, enhanced particles
+# v3.0: Advanced BPM tracker, dynamic energy analysis, background effects
 
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -g -I./src
@@ -27,6 +28,11 @@ COMMON_SRCS = src/main.c \
 V24_SRCS = src/control/control_bus.c \
            src/ui/ui_reactive.c \
            src/ui/help_overlay.c
+
+# v3.0 additions: Advanced audio analysis and background effects
+V30_SRCS = src/audio/bpm_tracker.c \
+           src/audio/energy_analyzer.c \
+           src/effects/background_fx.c
 
 # Frame-based dancer (uses your custom braille frames)
 FRAME_SRCS = src/dancer/dancer_rhythm.c
@@ -56,8 +62,8 @@ SRCS = $(COMMON_SRCS) $(FRAME_SRCS) $(AUDIO_SRCS)
 OBJS = $(SRCS:.c=.o)
 TARGET = asciidancer
 
-# Braille target sources (includes v2.4 modules)
-BRAILLE_ALL_SRCS = $(COMMON_SRCS) $(BRAILLE_SRCS) $(V24_SRCS) $(AUDIO_SRCS)
+# Braille target sources (includes v2.4 and v3.0 modules)
+BRAILLE_ALL_SRCS = $(COMMON_SRCS) $(BRAILLE_SRCS) $(V24_SRCS) $(V30_SRCS) $(AUDIO_SRCS)
 BRAILLE_OBJS = $(BRAILLE_ALL_SRCS:.c=.o)
 
 .PHONY: all braille clean install
