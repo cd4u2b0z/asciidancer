@@ -4,45 +4,74 @@ Development roadmap and feature tracking for asciidancer.
 
 ---
 
-##  Current Status: v3.0.1
+##  Current Status: v3.2.0 💃
 
-**Rating: 9.5/10 — Advanced audio analysis with spectacular background effects
+**Rating: 9.7/10 — 228 poses with genre-specific dance styles**
 
 ###  Completed Features
-- [x] 36 unique poses across 7 energy categories
+- [x] **228 base poses** across 13 categories (~1,190 with variations)
+- [x] **6 genre-specific dance styles** (moonwalk, ballet, breakdance, waltz, robot, headbang)
+- [x] **Easter egg system** (~15% trigger rate for genre-specific moves)
+- [x] **Enhanced genre detection** (electronic, rock, hip-hop, pop, ambient, classical)
 - [x] Physics-based joint animation (spring-damper system)
 - [x] Beat detection with BPM estimation
-- [x] Style/genre detection (electronic, rock, hip-hop, ambient, classical)
 - [x] Frequency-specific movement (bass→legs, mids→torso, treble→arms)
 - [x] Unicode Braille rendering (2×4 subpixel resolution)
 - [x] PipeWire + PulseAudio audio backends
-- [x] Anti-repetition pose history
+- [x] Anti-repetition pose history (avoids recent 8 poses)
 - [x] Easing functions (quad, cubic, bounce, elastic)
 - [x] INI config file (`~/.config/asciidancer/config.ini`)
-- [x] 256-color gradients with 7 themes
+- [x] 256-color gradients with 13 themes
 - [x] Ground line with shadow/reflection
 - [x] Adaptive terminal scaling (SIGWINCH resize)
 - [x] Runtime theme cycling (`t` key)
 - [x] Particle system with physics
 - [x] Motion trails with fading
-- [x] Visual enhancements (breathing, floor vibe, shake)
+- [x] Visual enhancements (breathing, floor vibe)
 - [x] Control bus architecture with unified signals
 - [x] UI reactivity (border pulse, energy meter, beat indicator)
 - [x] Knee constraint system (prevents inward collapse)
 - [x] Body bounds tracking for particle exclusion
 - [x] Enhanced particle repulsion system
 - [x] Interactive help overlay (? or F1 key)
-- [x] 13 color themes (6 new: aurora, sunset, ocean, candy, vapor, ember)
+- [x] 13 color themes (aurora, sunset, ocean, candy, vapor, ember, etc.)
 - [x] Frame recording/export mode (X key)
 - [x] Performance profiler overlay (I key)
 - [x] Audio source picker menu (--pick-source)
 - [x] Terminal capabilities detection (--show-caps)
+- [x] **7 background particle effects** (ambient, waves, aura, burst, ribbons, rain, vortex)
 
 ---
 
+##  v3.2.0 — Dance Revolution 💃 (COMPLETED)
+
+**Achieved: 9.5 → 9.7** | Released 2026-01-19
+
+### 🕺 New Dance Styles
+- [x] **Moonwalk** (4 poses) — Smooth backward slides with toe stands and glides
+- [x] **Ballet** (5 poses) — Classical positions including arabesque, plié, relevé
+- [x] **Breakdance** (4 poses) — Power moves with toprocks, freezes, prep stances
+- [x] **Waltz** (4 poses) — Elegant ballroom frames, turns, rises, sways
+- [x] **Robot** (5 poses) — Mechanical locks, isolations, extensions
+- [x] **Headbang** (4 poses) — Rock power stances with horns up
+
+### 🎵 Enhanced Genre Detection
+- [x] **Pop style** category added for balanced, steady-beat tracks
+- [x] **Easter egg triggers** — Genre-specific moves activate randomly (~15% chance)
+- [x] **Improved thresholds** for better electronic, hip-hop, rock, classical detection
+- [x] **Genre-pose mapping** — Electronic→Robot, Hip-hop→Moonwalk/Breakdance, etc.
+
+### 📊 Pose System Expansion
+- [x] **228 base poses** (up from 36 — 6× increase)
+- [x] **~1,190 total variations** with procedural mirroring
+- [x] **13 pose categories** (added 6 new genre-specific categories)
+
+### 🧹 Code Cleanup
+- [x] **Legacy code archived** — Moved 9 unused files (~1,342 lines) to `src/dancer/legacy/`
+- [x] **Removed stub features** — Cleaned up non-functional visualizer code
+- [x] **API compatibility maintained** — Stub functions retained for integrations
 
 ---
-
 
 ##  v3.0.1 — Production Tools (COMPLETED)
 

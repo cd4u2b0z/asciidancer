@@ -14,6 +14,8 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 ![Version](https://img.shields.io/badge/Version-3.2.0-blue?style=flat)
 
+![Demo](assets/demo.gif)
+
 ```
     ⠀⣀⣀⠀
    ⠀⣿⣿⣿⠀      
@@ -128,6 +130,16 @@ make braille
 # Or build the frame-based dancer
 make
 ```
+
+###  Generate Demo GIF
+
+Requires [VHS](https://github.com/charmbracelet/vhs) (install with `brew install vhs` or `go install github.com/charmbracelet/vhs@latest`)
+
+```bash
+vhs demo.tape
+```
+
+This will generate `assets/demo.gif` showcasing the dancer in action.
 
 ---
 
@@ -355,6 +367,9 @@ asciidancer/
 │       └  cavacore.c      # FFT processing
 ├  docs/
 │   └  V3_FEATURES.md      # v3.0+ Feature guide
+├  assets/
+│   └  demo.gif            # Demo animation
+├  demo.tape               # VHS demo script
 ├  README.md
 ├  CHANGELOG.md
 ├  ROADMAP.md
