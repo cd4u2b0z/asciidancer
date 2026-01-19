@@ -4,9 +4,9 @@ Development roadmap and feature tracking for asciidancer.
 
 ---
 
-##  Current Status: v2.4.0
+##  Current Status: v2.4+
 
-**Rating: 9.5/10** — Production-ready visualizer with control bus architecture
+**Rating: 9.7/10** — Feature-complete visualizer with help overlay and expanded themes
 
 ###  Completed Features
 - [x] 36 unique poses across 7 energy categories
@@ -31,6 +31,8 @@ Development roadmap and feature tracking for asciidancer.
 - [x] Knee constraint system (prevents inward collapse)
 - [x] Body bounds tracking for particle exclusion
 - [x] Enhanced particle repulsion system
+- [x] Interactive help overlay (? or F1 key)
+- [x] 13 color themes (6 new: aurora, sunset, ocean, candy, vapor, ember)
 
 ---
 
@@ -118,10 +120,35 @@ Development roadmap and feature tracking for asciidancer.
   - Outward repulsion from body center
   - Dynamic spawn parameters based on audio
 
-- [ ] **Help overlay** (`?` key) — Deferred to v2.5
+- [x] **Help overlay** (`?` key) — ✅ Completed in v2.4+
 - [ ] **Audio source picker** — Deferred to v2.5
 - [ ] **Recording mode** — Deferred to v3.0
-- [ ] **More themes** — Deferred to v2.5
+- [x] **More themes** (6 new) — ✅ Completed in v2.4+
+
+---
+
+##  v2.4+ — Help & Themes (COMPLETED)
+
+**Achieved: 9.5 → 9.7** | Released 2026-01-18
+
+- [x] **Interactive help overlay**
+  - Toggleable with ? or F1 key
+  - Shows all keybindings and current settings
+  - Smooth fade animation
+  - Box-drawing UI with live status
+
+- [x] **6 new color themes** (13 total)
+  - Aurora 🌌 (northern lights)
+  - Sunset 🌅 (warm gradient)
+  - Ocean 🌊 (deep sea)
+  - Candy 🍬 (soft pastels)
+  - Vapor 📼 (intense vaporwave)
+  - Ember 🔴 (glowing coals)
+
+- [x] **Theme system improvements**
+  - THEME_COUNT enum for cleaner iteration
+  - Better preview descriptions with emojis
+  - All use 256-color xterm palette
 
 ---
 

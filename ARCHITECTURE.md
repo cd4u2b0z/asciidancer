@@ -70,10 +70,11 @@ src/
 │
 ├── 󰍹 render/                # Terminal output
 │   ├── render_new.c        # ncurses
-│   └── colors.c            # 256-color themes
+│   └── colors.c            # 13 themes (256-color)
 │
-├── 󰌌 ui/                    # v2.4: Reactive UI
-│   └── ui_reactive.c       # Border pulse, energy meter
+├── 󰌌 ui/                    # v2.4+: Reactive UI & Help
+│   ├── ui_reactive.c       # Border pulse, energy meter, beat indicator
+│   └── help_overlay.c      # Interactive help (? or F1)
 │
 └── 󰒓 config/                # Configuration
     └── config.c            # INI parser

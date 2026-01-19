@@ -1,10 +1,10 @@
 <- {motion} = {motion} = Original work by Dr. Baklava • github.com/cd4u2b0z • 2026 -->
 
-#  ASCII Dancer v2.4
+#  ASCII Dancer v2.4+
 
 **A terminal-based audio visualizer with a dancing Unicode Braille character that reacts to music in real-time.**
 
-**Latest:** Control bus architecture • UI reactivity • Knee constraints • Enhanced particles
+**Latest:** Help overlay • 6 new themes (13 total) • Control bus architecture • UI reactivity
 
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
 ![C](https://img.shields.io/badge/C-A8B9CC?style=flat&logo=c&logoColor=black)
@@ -114,25 +114,40 @@ make
 ###  Runtime Controls
 | Key | Action |
 |-----|--------|
+| `?` / `F1` | **Toggle help overlay** |
 | `q` / `Esc` | Quit |
 | `+` / `-` | Adjust sensitivity |
-| `t` | Cycle color themes |
+| `t` | Cycle color themes (13 available) |
 | `g` | Toggle ground line |
 | `r` | Toggle shadow/reflection |
 | `p` | Toggle particles |
 | `m` | Toggle motion trails |
 | `b` | Toggle breathing animation |
 
-###  Color Themes
+###  Color Themes (13 Available)
+
+**Original Themes:**
 | Theme | Description |
 |-------|-------------|
-|  `default` | Classic green terminal |
+|  `default` | Classic cyan gradient |
 |  `fire` | Red/orange/yellow gradient |
 |  `ice` | Blue/cyan/white gradient |
-|  `neon` | Vibrant pink/purple/cyan |
+|  `neon` | Vibrant magenta/cyan/green |
 |  `matrix` | Green on black |
-|  `synthwave` | Purple/magenta/cyan |
+|  `synthwave` | Purple/pink gradient |
 |  `mono` | White/gray monochrome |
+
+**v2.4+ New Themes:**
+| Theme | Description |
+|-------|-------------|
+|  `aurora` 🌌 | Northern lights (green→teal→blue→purple) |
+|  `sunset` 🌅 | Warm evening sky (orange→pink→purple) |
+|  `ocean` 🌊 | Deep sea vibes (navy→teal→aqua→seafoam) |
+|  `candy` 🍬 | Soft pastels (pink→mint→lavender) |
+|  `vapor` 📼 | Intense vaporwave (hot pink→cyan→purple) |
+|  `ember` 🔴 | Glowing coals (dark red→orange→yellow) |
+
+Press `t` to cycle through all themes, or press `?` for the interactive help overlay.
 
 ---
 

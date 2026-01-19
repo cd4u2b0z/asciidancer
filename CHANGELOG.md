@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## 🎨 v2.4+ - Help & Themes (January 2026)
+
+### 🆕 New Features
+- **Interactive Help Overlay** — Press `?` or `F1` to toggle help screen
+  - Shows all keybindings organized by category
+  - Live status display (theme, BPM, sensitivity, active effects)
+  - Smooth fade-in/fade-out animation
+  - Clean box-drawing UI with Unicode characters
+
+- **6 New Color Themes** — Expanded from 7 to 13 total themes
+  - **Aurora** 🌌 — Northern lights (green→teal→blue→purple)
+  - **Sunset** 🌅 — Warm evening sky (orange→pink→purple)
+  - **Ocean** 🌊 — Deep sea vibes (navy→teal→aqua→seafoam)
+  - **Candy** 🍬 — Soft pastels (pink→mint→lavender)
+  - **Vapor** 📼 — Intense vaporwave (hot pink→cyan→purple)
+  - **Ember** 🔴 — Glowing coals (dark red→orange→yellow)
+
+### 🔧 Improvements
+- Theme cycling now uses `THEME_COUNT` enum for cleaner iteration
+- Better theme preview descriptions with emoji indicators
+- Usage text updated to show 13 available themes
+- All themes use 256-color xterm palette for smooth gradients
+
+### 📄 Technical
+- New files: `src/ui/help_overlay.h`, `src/ui/help_overlay.c`
+- Updated: `src/config/config.h` (added 6 theme enums + THEME_COUNT)
+- Updated: `src/config/config.c` (theme name parsing)
+- Updated: `src/render/colors.c` (6 new theme implementations, ~130 lines each)
+- Updated: `src/main.c` (help overlay integration)
+- Makefile: Added `help_overlay.c` to V24_SRCS
+
+---
 
 ## 󰱒 v2.4 - Polish & UX Pass (January 2026)
 
